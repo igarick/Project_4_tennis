@@ -1,6 +1,5 @@
 package com.tennis.model;
 
-import com.tennis.model.Player;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
