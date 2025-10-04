@@ -1,0 +1,49 @@
+plugins {
+    id 'java'
+    id 'war'
+}
+
+group 'com.tennis'
+version '1.0-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    junitVersion = '5.11.0'
+}
+
+java {
+    sourceCompatibility = '21'
+    targetCompatibility = '21'
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}
+
+dependencies {
+    implementation 'org.hibernate:hibernate-core:6.5.2.Final'
+    runtimeOnly 'com.h2database:h2:2.2.224'
+    implementation 'com.h2database:h2:2.2.224'
+    compileOnly("org.projectlombok:lombok:1.18.42")
+    annotationProcessor("org.projectlombok:lombok:1.18.42")
+    compileOnly('jakarta.servlet:jakarta.servlet-api:6.1.0')
+
+    implementation 'jakarta.activation:jakarta.activation-api:2.1.1'
+    configurations.all {
+        resolutionStrategy {
+            force 'jakarta.activation:jakarta.activation-api:2.1.1'
+        }
+    }
+
+    testCompileOnly("org.projectlombok:lombok:1.18.42")
+    testAnnotationProcessor("org.projectlombok:lombok:1.18.42")
+    testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
+}
+
+test {
+    useJUnitPlatform()
+}
