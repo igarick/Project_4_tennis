@@ -30,7 +30,5 @@ public class NewMatchServlet extends HttpServlet {
         }
 
 
-        System.out.println(nameFirstPlayer);
-        System.out.println(nameSecondPlayer);
     }
 }

@@ -13,7 +13,7 @@
     <property name="format_sql">true</property>
 
     <!--  DB schema will be updated if needed  -->
-    <!--       <mapping class="com.home.model.Player"/> -->
+<!--           <mapping class="com.tennis.model.Player"/> -->
     <property name="hibernate.hbm2ddl.auto">update</property>
     <property name="current_session_context_class">thread</property>
   </session-factory>
