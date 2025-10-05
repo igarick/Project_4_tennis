@@ -33,12 +33,17 @@
             <h1>Start new match</h1>
             <div class="new-match-image"></div>
             <div class="form-container center">
-                <form method="post" action="#">
-                    <p style="color: red;">Sample error message</p>
+                <form method="post" action="new-match">
+<%--                    <p style="color: red;">Sample error message</p>--%>
+                    <% String error = (String) request.getAttribute("error"); %>
+                    <% if (error != null) { %>
+                    <p style="color: red;"><%= error %></p>
+                    <% } %>
                     <label class="label-player" for="playerOne">Player one</label>
-                    <input class="input-player" placeholder="Name" type="text" required title="Enter a name">
+                    <input class="input-player" name="playerOne" placeholder="Name" type="text">
+<%--    required title="Enter a name"--%>
                     <label class="label-player" for="playerTwo">Player two</label>
-                    <input class="input-player" placeholder="Name" type="text" required title="Enter a name">
+                    <input class="input-player" name="playerTwo" placeholder="Name" type="text">
                     <input class="form-button" type="submit" value="Start">
                 </form>
             </div>
