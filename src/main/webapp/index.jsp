@@ -39,7 +39,7 @@
                     Start a new match
                 </button>
             </a>
-            <a class="homepage-action-button" href="match-score.html">
+            <a class="homepage-action-button" href="error.jsp">
                 <button class="btn view-results">
                     View match results
                 </button>

@@ -15,14 +15,17 @@ import lombok.NoArgsConstructor;
 public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(nullable = false)
+    @Column(name = "ID", nullable = false)
     private Integer ID;
+
     @ManyToOne
     @JoinColumn(name = "PLAYER1")
     private Player player1;
+
     @ManyToOne
     @JoinColumn(name = "PLAYER2")
     private Player player2;
+
     @ManyToOne
     @JoinColumn(name = "WINNER")
     private Player winner;

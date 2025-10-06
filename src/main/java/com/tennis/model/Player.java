@@ -18,6 +18,6 @@ public class Player {
     @Column(nullable = false)
     private Integer id;
 
-    @Column(unique = true, length = 15)
+    @Column(unique = true, length = 15, nullable = false)
     private String name;
 }
