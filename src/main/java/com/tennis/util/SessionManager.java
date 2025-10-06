@@ -18,6 +18,12 @@ public class SessionManager {
             return new Configuration().configure(PROPERTY_NAME)
                     .buildSessionFactory();
         } catch (HibernateException e) {
+
+//            request.setAttribute("errorCode", 500);
+//            request.setAttribute("errorMessage", "Ошибка подключения к базе данных");
+//            request.getRequestDispatcher("error.jsp").forward(request, response);
+
+
             throw new RuntimeException(e);
             // to do
         }
