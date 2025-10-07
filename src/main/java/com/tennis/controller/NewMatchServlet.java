@@ -10,9 +10,9 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.exception.ConstraintViolationException;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Optional;
 
 @WebServlet("/new-match")
@@ -30,51 +30,60 @@ public class NewMatchServlet extends HttpServlet {
         String nameFirstPlayer = req.getParameter("playerOne");
         String nameSecondPlayer = req.getParameter("playerTwo");
 
-//        Optional<String> errorMessage = RequestValidator.validateParam(nameFirstPlayer, nameSecondPlayer);
-//        if (errorMessage.isPresent()) {
-//            req.setAttribute("error", errorMessage.get());
-//            req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
-//            return;
-//        }
-
-
-//        Player player1 = Player.builder().name("кuuu").build();
+        Optional<String> errorMessage = RequestValidator.validateParam(nameFirstPlayer, nameSecondPlayer);
+        if (errorMessage.isPresent()) {
+            req.setAttribute("error", errorMessage.get());
+            req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
+            return;
+        }
 
 //        Player player1 = Player.builder().name(nameFirstPlayer).build();
 //        Player player2 = Player.builder().name(nameSecondPlayer).build();
 
-        SessionFactory factory = SessionManager.getFactory();
+        SessionFactory factory = SessionManager.getSessionFactory();
         try {
             Session session = factory.getCurrentSession();
             session.beginTransaction();
 //            session.persist(player1);
 
 
-            Player name = session.createQuery("from Player where name = :name", Player.class)
-                    .setParameter("name", nameFirstPlayer)
-                    .getSingleResult();
+//            Optional<Player> firstName = session.createQuery("from Player where name = :name", Player.class)
+//                    .setParameter("name", nameFirstPlayer)
+//                    .uniqueResultOptional();
+//
+//            Optional<Player> secondName = session.createQuery("from Player where name = :name", Player.class)
+//                    .setParameter("name", nameSecondPlayer)
+//                    .uniqueResultOptional();
+//
+//            if (firstName.isPresent() || secondName.isPresent()) {
+//                req.setAttribute("error", "Такое имя (имена) уже существуют в базе");
+//                req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
+////                return;
+//            }
 
-            if(name != null) {
-                req.setAttribute("errorCode", 500);
-                req.setAttribute("errorMessage", "Ошибка подключения к базе данных");
-                req.getRequestDispatcher(ERROR_PAGE).forward(req, resp);
-                return;
-            }
+            List<Player> players = session.createQuery("from Player where name in (:names)", Player.class)
+                    .setParameter("names", List.of(nameFirstPlayer, nameSecondPlayer))
+                    .getResultList();
 
-            System.out.println("///////////////////////////////////");
+            List<String> names = players.stream()
+                    .map(Player::getName)
+                    .toList();
+
+            String message = "Следующие имена заняты: " + String.join(",", names);
+            session.getTransaction().commit();
+            req.setAttribute("error", message);
+            req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
+
+
+
+                    System.out.println("///////////////////////////////////");
 //            Player saved = session.get(Player.class, 1);
 //            System.out.println("Saved player: " + saved);
             System.out.println("///////////////////////////////////");
 
             session.getTransaction().commit();
-        } catch (ConstraintViolationException e) {
-
-            req.setAttribute("errorCode", 500);
-            req.setAttribute("errorMessage", "Ошибка подключения к базе данных");
-            req.getRequestDispatcher(ERROR_PAGE).forward(req, resp);
-
         } finally {
-            factory.close();
+//            factory.close();
         }
     }
 }

@@ -26,7 +26,8 @@ public class RequestValidator {
     }
 
     private static boolean isEmpty(String firstName, String secondName) {
-        return (firstName.isBlank() || secondName.isBlank());
+        return ((firstName == null || secondName == null)
+        || (firstName.isBlank() || secondName.isBlank()));
     }
 
     private static boolean isValidFormat(String firstName, String secondName) {

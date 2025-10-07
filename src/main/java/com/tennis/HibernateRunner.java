@@ -11,7 +11,7 @@ public class HibernateRunner {
     public static void main(String[] args) {
         Player player1 = Player.builder().name("кuuu").build();
 
-        SessionFactory factory = SessionManager.getFactory();
+        SessionFactory factory = SessionManager.getSessionFactory();
 
 
 //        SessionFactory factory = new Configuration()
