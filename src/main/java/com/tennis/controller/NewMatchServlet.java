@@ -38,28 +38,12 @@ public class NewMatchServlet extends HttpServlet {
         }
 
 //        Player player1 = Player.builder().name(nameFirstPlayer).build();
-//        Player player2 = Player.builder().name(nameSecondPlayer).build();
 
         SessionFactory factory = SessionManager.getSessionFactory();
         try {
             Session session = factory.getCurrentSession();
             session.beginTransaction();
 //            session.persist(player1);
-
-
-//            Optional<Player> firstName = session.createQuery("from Player where name = :name", Player.class)
-//                    .setParameter("name", nameFirstPlayer)
-//                    .uniqueResultOptional();
-//
-//            Optional<Player> secondName = session.createQuery("from Player where name = :name", Player.class)
-//                    .setParameter("name", nameSecondPlayer)
-//                    .uniqueResultOptional();
-//
-//            if (firstName.isPresent() || secondName.isPresent()) {
-//                req.setAttribute("error", "Такое имя (имена) уже существуют в базе");
-//                req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
-////                return;
-//            }
 
             List<Player> players = session.createQuery("from Player where name in (:names)", Player.class)
                     .setParameter("names", List.of(nameFirstPlayer, nameSecondPlayer))
@@ -69,11 +53,12 @@ public class NewMatchServlet extends HttpServlet {
                     .map(Player::getName)
                     .toList();
 
-            String message = "Следующие имена заняты: " + String.join(",", names);
-            session.getTransaction().commit();
-            req.setAttribute("error", message);
-            req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
-
+            if (!names.isEmpty()) {
+                String message = "Следующие имена заняты: " + String.join(", ", names);
+                session.getTransaction().commit();
+                req.setAttribute("error", message);
+                req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
+            }
 
 
                     System.out.println("///////////////////////////////////");
