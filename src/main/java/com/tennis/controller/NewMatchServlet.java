@@ -1,6 +1,9 @@
 package com.tennis.controller;
 
+import com.tennis.dto.PlayerNameDto;
+import com.tennis.dto.PlayersNamesDto;
 import com.tennis.model.Player;
+import com.tennis.service.NewMatchService;
 import com.tennis.util.SessionManager;
 import com.tennis.validator.RequestValidator;
 import jakarta.servlet.ServletException;
@@ -19,6 +22,7 @@ import java.util.Optional;
 public class NewMatchServlet extends HttpServlet {
     private static final String NEW_MATCH_PATH = "new-match.jsp";
     private static final String ERROR_PAGE = "error.jsp";
+    private static final NewMatchService newMatchService = new NewMatchService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -27,49 +31,55 @@ public class NewMatchServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String nameFirstPlayer = req.getParameter("playerOne");
-        String nameSecondPlayer = req.getParameter("playerTwo");
+        String parameter1 = req.getParameter("playerOne");
+        String parameter2 = req.getParameter("playerTwo");
 
-        Optional<String> errorMessage = RequestValidator.validateParam(nameFirstPlayer, nameSecondPlayer);
+        Optional<String> errorMessage = RequestValidator.validateParam(parameter1, parameter2);
         if (errorMessage.isPresent()) {
             req.setAttribute("error", errorMessage.get());
             req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
             return;
         }
 
-//        Player player1 = Player.builder().name(nameFirstPlayer).build();
+        PlayerNameDto player1 = new PlayerNameDto(parameter1);
+        PlayerNameDto player2 = new PlayerNameDto(parameter2);
 
-        SessionFactory factory = SessionManager.getSessionFactory();
-        try {
-            Session session = factory.getCurrentSession();
-            session.beginTransaction();
-//            session.persist(player1);
+        Player firstPlayer = newMatchService.save(player1);
+        Player secondPlayer = newMatchService.save(player2);
 
-            List<Player> players = session.createQuery("from Player where name in (:names)", Player.class)
-                    .setParameter("names", List.of(nameFirstPlayer, nameSecondPlayer))
-                    .getResultList();
-
-            List<String> names = players.stream()
-                    .map(Player::getName)
-                    .toList();
-
-            if (!names.isEmpty()) {
-                String message = "Следующие имена заняты: " + String.join(", ", names);
-                session.getTransaction().commit();
-                req.setAttribute("error", message);
-                req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
-            }
-
-
-                    System.out.println("///////////////////////////////////");
-//            Player saved = session.get(Player.class, 1);
-//            System.out.println("Saved player: " + saved);
-            System.out.println("///////////////////////////////////");
-
-            session.getTransaction().commit();
-        } finally {
-//            factory.close();
-        }
+////        Player player1 = Player.builder().name(firstPlayerName).build();
+//
+//        SessionFactory factory = SessionManager.getSessionFactory();
+//        try {
+//            Session session = factory.getCurrentSession();
+//            session.beginTransaction();
+////            session.persist(player1);
+//
+//            List<Player> players = session.createQuery("from Player where name in (:names)", Player.class)
+//                    .setParameter("names", List.of(firstPlayerName, secondPlayerName))
+//                    .getResultList();
+//
+//            List<String> names = players.stream()
+//                    .map(Player::getName)
+//                    .toList();
+//
+//            if (!names.isEmpty()) {
+//                String message = "Следующие имена заняты: " + String.join(", ", names);
+//                session.getTransaction().commit();
+//                req.setAttribute("error", message);
+//                req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
+//            }
+//
+//
+//                    System.out.println("///////////////////////////////////");
+////            Player saved = session.get(Player.class, 1);
+////            System.out.println("Saved player: " + saved);
+//            System.out.println("///////////////////////////////////");
+//
+//            session.getTransaction().commit();
+//        } finally {
+////            factory.close();
+//        }
     }
 }
 
