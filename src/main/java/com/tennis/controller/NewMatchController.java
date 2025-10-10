@@ -1,7 +1,9 @@
 package com.tennis.controller;
 
 import com.tennis.dto.PlayerDto;
+import com.tennis.model.GameModel;
 import com.tennis.model.Player;
+import com.tennis.model.ScorePlayerModel;
 import com.tennis.service.NewMatchService;
 import com.tennis.validator.RequestValidator;
 import jakarta.servlet.ServletException;
@@ -12,9 +14,10 @@ import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
 import java.util.Optional;
+import java.util.UUID;
 
 @WebServlet("/new-match")
-public class NewMatchServlet extends HttpServlet {
+public class NewMatchController extends HttpServlet {
     private static final String NEW_MATCH_PATH = "new-match.jsp";
     private static final String ERROR_PAGE = "error.jsp";
     private static final NewMatchService newMatchService = new NewMatchService();
@@ -41,6 +44,34 @@ public class NewMatchServlet extends HttpServlet {
 
         Player firstPlayer = newMatchService.get(firstDto);
         Player secondPlayer = newMatchService.get(secondDto);
+
+        UUID uuid = UUID.randomUUID();
+
+        GameModel gameModel = new GameModel(
+            new ScorePlayerModel(
+                    firstPlayer.getId(),
+                    0,
+                    0,
+                    0),
+            new ScorePlayerModel(
+                    secondPlayer.getId(),
+                    0,
+                    0,
+                    0
+            )
+        );
+
+        /*
+        +++ Создаём экземпляр класса, содержащего
+        +++ айди игроков
+        +++ и текущий счёт,
+
+        и кладём в коллекцию текущих матчей
+        (существующую только в памяти приложения, либо в key-value storage).
+        Ключом коллекции является UUID, значением - счёт в матче
+
+        Редирект на страницу /match-score?uuid=$match_id
+         */
 
         System.out.println(firstPlayer);
         System.out.println(secondPlayer);
