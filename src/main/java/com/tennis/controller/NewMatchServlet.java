@@ -1,21 +1,16 @@
 package com.tennis.controller;
 
-import com.tennis.dto.PlayerNameDto;
-import com.tennis.dto.PlayersNamesDto;
+import com.tennis.dto.PlayerDto;
 import com.tennis.model.Player;
 import com.tennis.service.NewMatchService;
-import com.tennis.util.SessionManager;
 import com.tennis.validator.RequestValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
 
 import java.io.IOException;
-import java.util.List;
 import java.util.Optional;
 
 @WebServlet("/new-match")
@@ -41,11 +36,14 @@ public class NewMatchServlet extends HttpServlet {
             return;
         }
 
-        PlayerNameDto player1 = new PlayerNameDto(parameter1);
-        PlayerNameDto player2 = new PlayerNameDto(parameter2);
+        PlayerDto firstDto = new PlayerDto(null, parameter1);
+        PlayerDto secondDto = new PlayerDto(null, parameter2);
 
-        Player firstPlayer = newMatchService.save(player1);
-        Player secondPlayer = newMatchService.save(player2);
+        Player firstPlayer = newMatchService.get(firstDto);
+        Player secondPlayer = newMatchService.get(secondDto);
+
+        System.out.println(firstPlayer);
+        System.out.println(secondPlayer);
 
 ////        Player player1 = Player.builder().name(firstPlayerName).build();
 //

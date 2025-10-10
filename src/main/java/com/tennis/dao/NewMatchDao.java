@@ -6,45 +6,61 @@ import com.tennis.util.SessionManager;
 import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
+import org.hibernate.Transaction;
 
 import java.util.List;
 import java.util.Optional;
 
 public class NewMatchDao {
 
-    public Optional<Player> findByName(String name) {
+    public List<Player> findByName(String name) {
+        Session session = null;
+        Transaction transaction = null;
         try {
             SessionFactory factory = SessionManager.getSessionFactory();
-            Session session = factory.getCurrentSession();
-            session.beginTransaction();
+            session = factory.getCurrentSession();
+            transaction = session.beginTransaction();
 
-            Player player = session.createQuery("from Player where name = :name", Player.class)
+            List<Player> players = session.createQuery("from Player where name = :name", Player.class)
                     .setParameter("name", name)
-                    .getSingleResult();
+                    .getResultList();
 
-            session.getTransaction().commit();
-            return Optional.of(player);
-        } catch (HibernateException e) {
-            throw new RuntimeException(e);
+            transaction.commit();
+            return players;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
+        return List.of();
     }
 
     public Player save(String name) {
-        SessionFactory factory = SessionManager.getSessionFactory();
-        Session session = factory.getCurrentSession();
+        Session session = null;
+        Transaction transaction = null;
         try {
-            session.beginTransaction();
+            SessionFactory factory = SessionManager.getSessionFactory();
+            session = factory.getCurrentSession();
+            transaction = session.beginTransaction();
 
             Player player = Player.builder().name(name).build();
             session.persist(player);
 
-            session.getTransaction().commit();
+            transaction.commit();
             return player;
-        } catch (HibernateException e) {
-            if (session.getTransaction().isActive()) {
-                session.getTransaction().rollback();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
             }
             throw new RuntimeException("Ошибка при сохранении игрока", e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
         }
     }
 
