@@ -5,6 +5,7 @@ import com.tennis.model.GameModel;
 import com.tennis.model.Player;
 import com.tennis.model.ScorePlayerModel;
 import com.tennis.service.NewMatchService;
+import com.tennis.service.OngoingMatchesService;
 import com.tennis.validator.RequestValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,6 +22,7 @@ public class NewMatchController extends HttpServlet {
     private static final String NEW_MATCH_PATH = "new-match.jsp";
     private static final String ERROR_PAGE = "error.jsp";
     private static final NewMatchService newMatchService = new NewMatchService();
+    private static final OngoingMatchesService ongoingMatchesService = new OngoingMatchesService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -60,6 +62,10 @@ public class NewMatchController extends HttpServlet {
                     0
             )
         );
+
+        ongoingMatchesService.setMatches(uuid, gameModel);
+
+        resp.sendRedirect("match-score.jsp?uuid=" + uuid);
 
         /*
         +++ Создаём экземпляр класса, содержащего
