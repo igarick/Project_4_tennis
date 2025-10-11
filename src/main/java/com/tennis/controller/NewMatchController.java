@@ -68,49 +68,16 @@ public class NewMatchController extends HttpServlet {
         +++ айди игроков
         +++ и текущий счёт,
 
-        и кладём в коллекцию текущих матчей
+        +++ и кладём в коллекцию текущих матчей
         (существующую только в памяти приложения, либо в key-value storage).
         Ключом коллекции является UUID, значением - счёт в матче
 
-        Редирект на страницу /match-score?uuid=$match_id
+        +++ Редирект на страницу /match-score?uuid=$match_id
          */
 
         System.out.println(firstPlayer);
         System.out.println(secondPlayer);
 
-////        Player player1 = Player.builder().name(firstPlayerName).build();
-//
-//        SessionFactory factory = SessionManager.getSessionFactory();
-//        try {
-//            Session session = factory.getCurrentSession();
-//            session.beginTransaction();
-////            session.persist(player1);
-//
-//            List<Player> players = session.createQuery("from Player where name in (:names)", Player.class)
-//                    .setParameter("names", List.of(firstPlayerName, secondPlayerName))
-//                    .getResultList();
-//
-//            List<String> names = players.stream()
-//                    .map(Player::getName)
-//                    .toList();
-//
-//            if (!names.isEmpty()) {
-//                String message = "Следующие имена заняты: " + String.join(", ", names);
-//                session.getTransaction().commit();
-//                req.setAttribute("error", message);
-//                req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
-//            }
-//
-//
-//                    System.out.println("///////////////////////////////////");
-////            Player saved = session.get(Player.class, 1);
-////            System.out.println("Saved player: " + saved);
-//            System.out.println("///////////////////////////////////");
-//
-//            session.getTransaction().commit();
-//        } finally {
-////            factory.close();
-//        }
     }
 }
 

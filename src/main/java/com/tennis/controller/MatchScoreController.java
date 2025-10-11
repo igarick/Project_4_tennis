@@ -17,16 +17,33 @@ public class MatchScoreController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+
+        String uuidParam = req.getParameter("uuid");
+        UUID uuid = UUID.fromString(uuidParam);
+
+        MatchScoreModel currentMatch = ongoingMatchesService.getCurrentMatch(uuid);
+        req.setAttribute("firstPlayerName", currentMatch.getMatch().getPlayer1().getName());
+        req.setAttribute("setScoreFirstPlayer", currentMatch.getSetScore().getFirstPlayer());
+        req.setAttribute("gameScoreFirstPlayer", currentMatch.getGameScore().getFirstPlayer());
+        req.setAttribute("pointScoreFirstPlayer", currentMatch.getPointScore().getFirstPlayer());
+
+        req.setAttribute("secondPlayerName", currentMatch.getMatch().getPlayer2().getName());
+        req.setAttribute("setScoreSecondPlayer", currentMatch.getSetScore().getSecondPlayer());
+        req.setAttribute("gameScoreSecondPlayer", currentMatch.getGameScore().getSecondPlayer());
+        req.setAttribute("pointScoreSecondPlayer", currentMatch.getPointScore().getSecondPlayer());
+
         req.getRequestDispatcher("match-score.jsp").forward(req, resp);
-
-        String strUuid = req.getParameter("uuid");
-        System.out.println(strUuid);
-
-        UUID uuid = UUID.fromString(strUuid);
-        MatchScoreModel one = ongoingMatchesService.getCurrentMatch(uuid);
-        System.out.println(one);
-
     }
+
+    @Override
+    protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+//        String uuidParam = req.getParameter("uuid");
+//        UUID uuid = UUID.fromString(uuidParam);
+//
+//        MatchScoreModel currentMatch = ongoingMatchesService.getCurrentMatch(uuid);
+//        req.setAttribute("firstPlayerName", currentMatch.getMatch().getPlayer1().getName());
+    }
+
     /*
     Обрабатывает POST запросы к /match-score
 
