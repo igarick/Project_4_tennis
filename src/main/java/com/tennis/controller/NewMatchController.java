@@ -1,9 +1,7 @@
 package com.tennis.controller;
 
 import com.tennis.dto.PlayerDto;
-import com.tennis.model.GameModel;
-import com.tennis.model.Player;
-import com.tennis.model.ScorePlayerModel;
+import com.tennis.model.*;
 import com.tennis.service.NewMatchService;
 import com.tennis.service.OngoingMatchesService;
 import com.tennis.validator.RequestValidator;
@@ -49,23 +47,21 @@ public class NewMatchController extends HttpServlet {
 
         UUID uuid = UUID.randomUUID();
 
-        GameModel gameModel = new GameModel(
-            new ScorePlayerModel(
-                    firstPlayer.getId(),
-                    0,
-                    0,
-                    0),
-            new ScorePlayerModel(
-                    secondPlayer.getId(),
-                    0,
-                    0,
-                    0
-            )
+        MatchScoreModel matchScoreModel = new MatchScoreModel(
+            new Match(
+                    null,
+                    firstPlayer,
+                    secondPlayer,
+                    null
+            ),
+                new Score(0, 0),
+                new Score(0, 0),
+                new Score(0, 0)
         );
 
-        ongoingMatchesService.setMatches(uuid, gameModel);
+        ongoingMatchesService.setMatches(uuid, matchScoreModel);
 
-        resp.sendRedirect("match-score.jsp?uuid=" + uuid);
+        resp.sendRedirect("match-score?uuid=" + uuid);
 
         /*
         +++ Создаём экземпляр класса, содержащего

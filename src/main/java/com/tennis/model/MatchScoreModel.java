@@ -7,7 +7,9 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class GameModel {
-    private ScorePlayerModel player1;
-    private ScorePlayerModel player2;
+public class MatchScoreModel {
+    private Match match;
+    private Score setScore;
+    private Score gameScore;
+    private Score pointScore;
 }
