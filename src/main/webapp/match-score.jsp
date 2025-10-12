@@ -52,7 +52,11 @@
                     <td class="table-text">${gameScoreFirstPlayer}</td>
                     <td class="table-text">${pointScoreFirstPlayer}</td>
                     <td class="table-text">
-                        <div class="score-btn">Score</div>
+<%--                        <div class="score-btn">Score</div>--%>
+                        <form method="post" action="match-score?uuid=${matchUuid}">
+                            <input type="hidden" name="firstPlayerId" value="${firstPlayerId}" />
+                            <button type="submit" class="score-btn">Score</button>
+                        </form>
                     </td>
                 </tr>
                 <tr class="player2">
@@ -61,7 +65,11 @@
                     <td class="table-text">${gameScoreSecondPlayer}</td>
                     <td class="table-text">${pointScoreSecondPlayer}</td>
                     <td class="table-text">
-                        <div class="score-btn">Score</div>
+<%--                        <div class="score-btn">Score</div>--%>
+                        <form method="post" action="match-score?uuid=${matchUuid}">
+                            <input type="hidden" name="secondPlayerId" value="${secondPlayerId}">
+                            <button type="submit" class="score-btn">Score</button>
+                        </form>
                     </td>
                 </tr>
 <%--                <tr class="player2">--%>
