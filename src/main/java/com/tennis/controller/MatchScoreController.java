@@ -1,6 +1,7 @@
 package com.tennis.controller;
 
 import com.tennis.model.MatchScoreModel;
+import com.tennis.service.MatchScoreCalculationService;
 import com.tennis.service.OngoingMatchesService;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -14,6 +15,7 @@ import java.util.UUID;
 @WebServlet("/match-score")
 public class MatchScoreController extends HttpServlet {
     private static final OngoingMatchesService ongoingMatchesService = new OngoingMatchesService();
+    private static final MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -22,6 +24,7 @@ public class MatchScoreController extends HttpServlet {
         UUID uuid = UUID.fromString(uuidParam);
 
         MatchScoreModel currentMatch = ongoingMatchesService.getCurrentMatch(uuid);
+
         req.setAttribute("firstPlayerName", currentMatch.getMatch().getPlayer1().getName());
         req.setAttribute("firstPlayerId", currentMatch.getMatch().getPlayer1().getId());
         req.setAttribute("setScoreFirstPlayer", currentMatch.getSetScore().getFirstPlayer());
@@ -35,6 +38,7 @@ public class MatchScoreController extends HttpServlet {
         req.setAttribute("pointScoreSecondPlayer", currentMatch.getPointScore().getSecondPlayer());
 
         req.setAttribute("matchUuid", uuid);
+
         req.getRequestDispatcher("match-score.jsp").forward(req, resp);
     }
 
@@ -42,6 +46,20 @@ public class MatchScoreController extends HttpServlet {
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         String uuidParam = req.getParameter("uuid");
         UUID uuid = UUID.fromString(uuidParam);
+
+        MatchScoreModel currentMatch = ongoingMatchesService.getCurrentMatch(uuid);
+
+        String firstPlayerIdParam = req.getParameter("firstPlayerId");
+        String secondPlayerIdParam = req.getParameter("secondPlayerId");
+
+        if (firstPlayerIdParam != null) {
+            matchScoreCalculationService.calculate(firstPlayerIdParam, currentMatch);
+        }
+
+        if (secondPlayerIdParam != null) {
+            matchScoreCalculationService.calculate(secondPlayerIdParam, currentMatch);
+        }
+
 
         System.out.println(uuidParam);
 
@@ -56,10 +74,24 @@ public class MatchScoreController extends HttpServlet {
     }
 
     /*
-    Обрабатывает POST запросы к /match-score
+    Обработчик POST запросов:
 
-    Через OngoingMatchesService получает экземпляр класса Match для текущего матча,
+    - Обрабатывает POST запросы к /match-score
+
+    - Через OngoingMatchesService получает экземпляр класса Match для текущего матча,
     который является моделью/частью модели MatchScoreModel
+
+    - Через MatchScoreCalculationService обновляет счёт в матче
+
+    - Если матч закончился - через FinishedMatchesPersistenceService сохраняет законченный матч в базу данных
+
+    - С помощью JSP шаблона отображает MatchScoreModel в виде отрендеренного HTML
+
+
+    Каждый из упомянутых сервисов делает конкретную работу:
+     - OngoingMatchesService хранит текущие матчи и позволяет их записывать/читать
+     - MatchScoreCalculationService реализует логику подсчёта счёта матча по очкам/геймам/сетам
+     - FinishedMatchesPersistenceService инкапсулирует чтение и запись законченных матчей в БД
 
 
 */

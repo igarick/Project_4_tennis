@@ -15,7 +15,7 @@ public class OngoingMatchesService {
         return currentMatches.get(uuid);
     }
 
-    public void setMatches(UUID uuid, MatchScoreModel matchScoreModel) {
+    public void setCurrentMatch(UUID uuid, MatchScoreModel matchScoreModel) {
         currentMatches.put(uuid, matchScoreModel);
     }
 }

@@ -59,7 +59,7 @@ public class NewMatchController extends HttpServlet {
                 new Score(0, 0)
         );
 
-        ongoingMatchesService.setMatches(uuid, matchScoreModel);
+        ongoingMatchesService.setCurrentMatch(uuid, matchScoreModel);
 
         resp.sendRedirect("match-score?uuid=" + uuid);
 
