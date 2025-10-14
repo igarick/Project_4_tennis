@@ -17,10 +17,10 @@ public class MatchScoreCalculationService {
         if (playerId.equals(firstPlayerId)) {
             Score firstPlayerScore = currentMatch.getFirstPlayerScore();
             Score secondPlayerScore = currentMatch.getSecondPlayerScore();
-            PointScoreEnum firstPlayerPoint = currentMatch.getFirstPlayerScore().getPoints();
+//            PointScoreEnum firstPlayerPoint = currentMatch.getFirstPlayerScore().getPoints();
 //            PointScoreEnum secondPlayerPoint = currentMatch.getSecondPlayerPoints();
 
-            addPoint(firstPlayerScore, currentMatch);
+//            addPoint(firstPlayerScore, currentMatch);
             update(firstPlayerScore, secondPlayerScore, currentMatch);
         }
 
@@ -28,11 +28,11 @@ public class MatchScoreCalculationService {
             Score firstPlayerScore = currentMatch.getSecondPlayerScore();
             Score secondPlayerScore = currentMatch.getFirstPlayerScore();
 //            PointScoreEnum firstPlayerPoint = currentMatch.getSecondPlayerPoints();
-            PointScoreEnum secondPlayerPoint = currentMatch.getSecondPlayerScore().getPoints();
+//            PointScoreEnum secondPlayerPoint = currentMatch.getSecondPlayerScore().getPoints();
 
 //            addPoint(secondPlayerPoint, currentMatch);
 //            update(firstPlayerPoint, secondPlayerPoint, currentMatch);
-            addPoint(firstPlayerScore, currentMatch);
+//            addPoint(firstPlayerScore, currentMatch);
             update(firstPlayerScore, secondPlayerScore, currentMatch);
 
 
@@ -40,25 +40,27 @@ public class MatchScoreCalculationService {
     }
 //    private void update(PointScoreEnum playerPoints,PointScoreEnum opponentPoints, MatchScoreModel currentMatch) {
 
-     private void update(Score firstPlayerScore,Score secondPlayerScore, MatchScoreModel currentMatch) {
+//     private void update(Score firstPlayerScore,Score secondPlayerScore, MatchScoreModel currentMatch) {
+         private void update(Score playerScore,Score opponentScore, MatchScoreModel currentMatch) {
 
-//         addPoint(playerPoints, currentMatch);
-//
-//        int firstPlayerSetScore = currentMatch.getFirstPlayerSets();
-//        int firstPlayerGameScore = currentMatch.getFirstPlayerGames();
-//        PointScoreEnum firstPlayerPointScore = currentMatch.getFirstPlayerPoints();
-//
-//        int secondPlayerSetScore = currentMatch.getSecondPlayerSets();
-//        int secondPlayerGameScore = currentMatch.getSecondPlayerGames();
-//        PointScoreEnum secondPlayerPointScore = currentMatch.getSecondPlayerPoints();
-//
-//        if (isDeuce(firstPlayerPointScore, secondPlayerPointScore)) {
-//            if (firstPlayerPointScore == ADVANTAGE) {
-//                currentMatch.setFirstPlayerPoints(FORTY);
-//                currentMatch.setSecondPlayerPoints(FORTY);
-//            }
-//            return;
-//        }
+         addPoint(playerScore, currentMatch);
+
+             int playerScoreSets = playerScore.getSets();
+             int playerScoreGames = playerScore.getGames();
+             PointScoreEnum playerScorePoints = playerScore.getPoints();
+
+             int opponentScoreSets = opponentScore.getSets();
+             int opponentScoreGames = opponentScore.getGames();
+             PointScoreEnum opponentScorePoints = opponentScore.getPoints();
+
+
+        if (isDeuce(playerScorePoints, opponentScorePoints)) {
+            if (playerScorePoints == ADVANTAGE) {
+                playerScore.setPoints(FORTY);
+                opponentScore.setPoints(FORTY);
+            }
+            return;
+        }
 
 //        if (isPointVictory(firstPlayerPointScore, secondPlayerPointScore)) {
 //
