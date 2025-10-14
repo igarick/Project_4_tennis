@@ -8,7 +8,15 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class MatchScoreModel {
     private Match match;
-    private Score setScore;
-    private Score gameScore;
-    private Score pointScore;
+//    private Score setScore;
+//    private Score gameScore;
+    private Score firstPlayerScore;
+    private Score secondPlayerScore;
+
+//    private int firstPlayerSets;
+//    private int secondPlayerSets;
+//    private int firstPlayerGames;
+//    private int secondPlayerGames;
+//    private PointScoreEnum firstPlayerPoints;
+//    private PointScoreEnum secondPlayerPoints;
 }

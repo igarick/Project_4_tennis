@@ -48,15 +48,24 @@ public class NewMatchController extends HttpServlet {
         UUID uuid = UUID.randomUUID();
 
         MatchScoreModel matchScoreModel = new MatchScoreModel(
-            new Match(
-                    null,
-                    firstPlayer,
-                    secondPlayer,
-                    null
-            ),
-                new Score(0, 0),
-                new Score(0, 0),
-                new Score(0, 0)
+                new Match(
+                        null,
+                        firstPlayer,
+                        secondPlayer,
+                        null
+                ),
+                new Score(0,
+                        0,
+                        PointScoreEnum.LOVE),
+                new Score(0,
+                        0,
+                        PointScoreEnum.LOVE)
+//                0,
+//                0,
+//                0,
+//                0,
+//                PointScoreEnum.LOVE,
+//                PointScoreEnum.LOVE
         );
 
         ongoingMatchesService.setCurrentMatch(uuid, matchScoreModel);

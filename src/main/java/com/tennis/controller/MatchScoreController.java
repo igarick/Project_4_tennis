@@ -27,15 +27,26 @@ public class MatchScoreController extends HttpServlet {
 
         req.setAttribute("firstPlayerName", currentMatch.getMatch().getPlayer1().getName());
         req.setAttribute("firstPlayerId", currentMatch.getMatch().getPlayer1().getId());
-        req.setAttribute("setScoreFirstPlayer", currentMatch.getSetScore().getFirstPlayer());
-        req.setAttribute("gameScoreFirstPlayer", currentMatch.getGameScore().getFirstPlayer());
-        req.setAttribute("pointScoreFirstPlayer", currentMatch.getPointScore().getFirstPlayer());
+        req.setAttribute("setScoreFirstPlayer", currentMatch.getFirstPlayerScore().getSets());
+        req.setAttribute("gameScoreFirstPlayer", currentMatch.getFirstPlayerScore().getGames());
+        req.setAttribute("pointScoreFirstPlayer", currentMatch.getFirstPlayerScore().getPoints().displayPoint());
+
+
+
+//        req.setAttribute("setScoreFirstPlayer", currentMatch.getFirstPlayerSets());
+//        req.setAttribute("gameScoreFirstPlayer", currentMatch.getFirstPlayerGames());
+//        req.setAttribute("pointScoreFirstPlayer", currentMatch.getFirstPlayerPoints().displayPoint());
 
         req.setAttribute("secondPlayerName", currentMatch.getMatch().getPlayer2().getName());
         req.setAttribute("secondPlayerId", currentMatch.getMatch().getPlayer2().getId());
-        req.setAttribute("setScoreSecondPlayer", currentMatch.getSetScore().getSecondPlayer());
-        req.setAttribute("gameScoreSecondPlayer", currentMatch.getGameScore().getSecondPlayer());
-        req.setAttribute("pointScoreSecondPlayer", currentMatch.getPointScore().getSecondPlayer());
+        req.setAttribute("setScoreSecondPlayer", currentMatch.getSecondPlayerScore().getSets());
+        req.setAttribute("gameScoreSecondPlayer", currentMatch.getSecondPlayerScore().getGames());
+        req.setAttribute("pointScoreSecondPlayer", currentMatch.getSecondPlayerScore().getPoints().displayPoint());
+
+
+//        req.setAttribute("setScoreSecondPlayer", currentMatch.getSecondPlayerSets());
+//        req.setAttribute("gameScoreSecondPlayer", currentMatch.getSecondPlayerGames());
+//        req.setAttribute("pointScoreSecondPlayer", currentMatch.getSecondPlayerPoints().displayPoint());
 
         req.setAttribute("matchUuid", uuidParam);
 
@@ -62,15 +73,24 @@ public class MatchScoreController extends HttpServlet {
 
         req.setAttribute("firstPlayerName", currentMatch.getMatch().getPlayer1().getName());
         req.setAttribute("firstPlayerId", currentMatch.getMatch().getPlayer1().getId());
-        req.setAttribute("setScoreFirstPlayer", currentMatch.getSetScore().getFirstPlayer());
-        req.setAttribute("gameScoreFirstPlayer", currentMatch.getGameScore().getFirstPlayer());
-        req.setAttribute("pointScoreFirstPlayer", currentMatch.getPointScore().getFirstPlayer());
+        req.setAttribute("setScoreFirstPlayer", currentMatch.getFirstPlayerScore().getSets());
+        req.setAttribute("gameScoreFirstPlayer", currentMatch.getFirstPlayerScore().getGames());
+        req.setAttribute("pointScoreFirstPlayer", currentMatch.getFirstPlayerScore().getPoints().displayPoint());
+
+
+//        req.setAttribute("setScoreFirstPlayer", currentMatch.getFirstPlayerSets());
+//        req.setAttribute("gameScoreFirstPlayer", currentMatch.getFirstPlayerGames());
+//        req.setAttribute("pointScoreFirstPlayer", currentMatch.getFirstPlayerPoints().displayPoint());
 
         req.setAttribute("secondPlayerName", currentMatch.getMatch().getPlayer2().getName());
         req.setAttribute("secondPlayerId", currentMatch.getMatch().getPlayer2().getId());
-        req.setAttribute("setScoreSecondPlayer", currentMatch.getSetScore().getSecondPlayer());
-        req.setAttribute("gameScoreSecondPlayer", currentMatch.getGameScore().getSecondPlayer());
-        req.setAttribute("pointScoreSecondPlayer", currentMatch.getPointScore().getSecondPlayer());
+        req.setAttribute("setScoreSecondPlayer", currentMatch.getSecondPlayerScore().getSets());
+        req.setAttribute("gameScoreSecondPlayer", currentMatch.getSecondPlayerScore().getGames());
+        req.setAttribute("pointScoreSecondPlayer", currentMatch.getSecondPlayerScore().getPoints().displayPoint());
+
+//        req.setAttribute("setScoreSecondPlayer", currentMatch.getSecondPlayerSets());
+//        req.setAttribute("gameScoreSecondPlayer", currentMatch.getSecondPlayerGames());
+//        req.setAttribute("pointScoreSecondPlayer", currentMatch.getSecondPlayerPoints().displayPoint());
 
         System.out.println(uuidParam);
 

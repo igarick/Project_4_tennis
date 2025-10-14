@@ -7,6 +7,10 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 public class Score {
-    private int firstPlayer;
-    private int secondPlayer;
+    private int sets;
+    private int games;
+    private PointScoreEnum points;
+
+//    private int firstPlayer;
+//    private int secondPlayer;
 }

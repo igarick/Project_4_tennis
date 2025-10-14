@@ -46,15 +46,17 @@
                 </thead>
                 <tbody>
                 <tr class="player1">
-<%--                    <td class="table-text">Rafael Nadal</td>--%>
+                    <%--                    <td class="table-text">Rafael Nadal</td>--%>
                     <td class="table-text">${firstPlayerName}</td>
                     <td class="table-text">${setScoreFirstPlayer}</td>
                     <td class="table-text">${gameScoreFirstPlayer}</td>
+                    <%--                    <td class="table-text">${pointScoreFirstPlayer}</td>--%>
                     <td class="table-text">${pointScoreFirstPlayer}</td>
+
                     <td class="table-text">
-<%--                        <div class="score-btn">Score</div>--%>
+                        <%--                        <div class="score-btn">Score</div>--%>
                         <form method="post" action="match-score?uuid=${matchUuid}">
-                            <input type="hidden" name="firstPlayerId" value="${firstPlayerId}" />
+                            <input type="hidden" name="firstPlayerId" value="${firstPlayerId}"/>
                             <button type="submit" class="score-btn">Score</button>
                         </form>
                     </td>
@@ -65,22 +67,22 @@
                     <td class="table-text">${gameScoreSecondPlayer}</td>
                     <td class="table-text">${pointScoreSecondPlayer}</td>
                     <td class="table-text">
-<%--                        <div class="score-btn">Score</div>--%>
+                        <%--                        <div class="score-btn">Score</div>--%>
                         <form method="post" action="match-score?uuid=${matchUuid}">
                             <input type="hidden" name="secondPlayerId" value="${secondPlayerId}">
                             <button type="submit" class="score-btn">Score</button>
                         </form>
                     </td>
                 </tr>
-<%--                <tr class="player2">--%>
-<%--                    <td class="table-text">Roger Federer</td>--%>
-<%--                    <td class="table-text">2</td>--%>
-<%--                    <td class="table-text">3</td>--%>
-<%--                    <td class="table-text">15</td>--%>
-<%--                    <td class="table-text">--%>
-<%--                        <div class="score-btn">Score</div>--%>
-<%--                    </td>--%>
-<%--                </tr>--%>
+                <%--                <tr class="player2">--%>
+                <%--                    <td class="table-text">Roger Federer</td>--%>
+                <%--                    <td class="table-text">2</td>--%>
+                <%--                    <td class="table-text">3</td>--%>
+                <%--                    <td class="table-text">15</td>--%>
+                <%--                    <td class="table-text">--%>
+                <%--                        <div class="score-btn">Score</div>--%>
+                <%--                    </td>--%>
+                <%--                </tr>--%>
                 </tbody>
             </table>
         </section>
@@ -88,7 +90,8 @@
 </main>
 <footer>
     <div class="footer">
-        <p>&copy; Tennis Scoreboard, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a> roadmap.</p>
+        <p>&copy; Tennis Scoreboard, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a>
+            roadmap.</p>
     </div>
 </footer>
 </body>
