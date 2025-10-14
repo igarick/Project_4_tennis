@@ -40,32 +40,35 @@ public class MatchScoreCalculationService {
     }
 //    private void update(PointScoreEnum playerPoints,PointScoreEnum opponentPoints, MatchScoreModel currentMatch) {
 
-//     private void update(Score firstPlayerScore,Score secondPlayerScore, MatchScoreModel currentMatch) {
-         private void update(Score playerScore,Score opponentScore, MatchScoreModel currentMatch) {
+    //     private void update(Score firstPlayerScore,Score secondPlayerScore, MatchScoreModel currentMatch) {
+    private void update(Score playerScore, Score opponentScore, MatchScoreModel currentMatch) {
 
-         addPoint(playerScore, currentMatch);
+        addPoint(playerScore);
 
-             int playerScoreSets = playerScore.getSets();
-             int playerScoreGames = playerScore.getGames();
-             PointScoreEnum playerScorePoints = playerScore.getPoints();
+        int playerScoreSets = playerScore.getSets();
+        int playerScoreGames = playerScore.getGames();
+        PointScoreEnum playerScorePoints = playerScore.getPoints();
 
-             int opponentScoreSets = opponentScore.getSets();
-             int opponentScoreGames = opponentScore.getGames();
-             PointScoreEnum opponentScorePoints = opponentScore.getPoints();
+        int opponentScoreSets = opponentScore.getSets();
+        int opponentScoreGames = opponentScore.getGames();
+        PointScoreEnum opponentScorePoints = opponentScore.getPoints();
 
 
         if (isDeuce(playerScorePoints, opponentScorePoints)) {
-            if (playerScorePoints == ADVANTAGE) {
-                playerScore.setPoints(FORTY);
-                opponentScore.setPoints(FORTY);
-            }
+            playerScore.setPoints(FORTY);
+            opponentScore.setPoints(FORTY);
             return;
         }
 
-//        if (isPointVictory(firstPlayerPointScore, secondPlayerPointScore)) {
-//
-//            return;
-//        }
+        if (isPointVictory(playerScorePoints, opponentScorePoints)) {
+            playerScore.setPoints(PointScoreEnum.LOVE);
+            opponentScore.setPoints(PointScoreEnum.LOVE);
+
+//            playerScore.setGames();
+
+            System.out.println("**************** playre Win*******************");
+            return;
+        }
 
 //        if (isSetVictory(firstPlayerSetScore, secondPlayerSetScore)) {
 //            // redirect to winPage
@@ -80,7 +83,7 @@ public class MatchScoreCalculationService {
 
     }
 
-    private void addPoint(Score playerScore, MatchScoreModel currentMatch) {      //PointScoreEnum firstPlayerPoint
+    private void addPoint(Score playerScore) {      //PointScoreEnum firstPlayerPoint
         PointScoreEnum point = playerScore.getPoints();
         switch (point) {
             case LOVE:
@@ -95,19 +98,22 @@ public class MatchScoreCalculationService {
             case FORTY:
                 playerScore.setPoints(PointScoreEnum.ADVANTAGE);
                 break;
-
+            case ADVANTAGE:
+                playerScore.setPoints(PointScoreEnum.WIN);
+                break;
+            default:
+                playerScore.setPoints(point);
         }
     }
 
 
-
-    private boolean isDeuce(PointScoreEnum firstPlayer, PointScoreEnum secondPlayer) {
-        return ((firstPlayer == ADVANTAGE && secondPlayer == ADVANTAGE) ||
-         (firstPlayer == FORTY && secondPlayer == FORTY));
+    private boolean isDeuce(PointScoreEnum playerScore, PointScoreEnum opponentScore) {
+        return (playerScore == ADVANTAGE && opponentScore == ADVANTAGE);
     }
 
-//    private boolean isPointVictory(PointScoreEnum firstPlayer, PointScoreEnum secondPlayer) {
-//        if (firstPlayer == PointScoreEnum.ADVANTAGE && secondPlayer != PointScoreEnum.FORTY)
+    private boolean isPointVictory(PointScoreEnum playerScore, PointScoreEnum opponentScore) {
+        return  ((playerScore == PointScoreEnum.ADVANTAGE && opponentScore != FORTY) ||
+        (playerScore == PointScoreEnum.WIN && opponentScore == FORTY));
 //
 //
 //            int first = firstPlayer.getPoint();
@@ -117,7 +123,7 @@ public class MatchScoreCalculationService {
 //
 //            (firstPlayerPointScore > 40 && firstPlayerPointScore - secondPlayerPointScore == 2)) ;
 //        return true;
-//    }
+    }
 
     private boolean isGameVictory(int firstPlayerGameScore, int secondPlayerGameScore) {
         return (firstPlayerGameScore >= 6 && firstPlayerGameScore - secondPlayerGameScore == 2);
