@@ -64,23 +64,24 @@ public class MatchScoreCalculationService {
             playerScore.setPoints(PointScoreEnum.LOVE);
             opponentScore.setPoints(PointScoreEnum.LOVE);
 
-//            playerScore.setGames();
+            updateScoreGames(playerScore, playerScoreGames);
+        }
 
-            System.out.println("**************** playre Win*******************");
+        if (isGameVictory(playerScoreGames, opponentScoreGames)) {
+
+            System.out.println("--*-*-*-*-*-*-*-*-*-*-*-*-*- win *- *-*-*-*-*- *-*- *-* -*");
             return;
         }
 
-//        if (isSetVictory(firstPlayerSetScore, secondPlayerSetScore)) {
+//        if (isSetVictory(playerScorePoints, opponentScorePoints)) {
 //            // redirect to winPage
 //            return;
 //        }
-//
-//
-//        if (isGameVictory(firstPlayerGameScore, secondPlayerGameScore)) {
-//            return;
-//        }
+    }
 
-
+    private void updateScoreGames(Score playerScore, int playerScoreGames) {
+        int updatedScoreGame = playerScoreGames + 1;
+        playerScore.setGames(updatedScoreGame);
     }
 
     private void addPoint(Score playerScore) {      //PointScoreEnum firstPlayerPoint
@@ -114,19 +115,13 @@ public class MatchScoreCalculationService {
     private boolean isPointVictory(PointScoreEnum playerScore, PointScoreEnum opponentScore) {
         return  ((playerScore == PointScoreEnum.ADVANTAGE && opponentScore != FORTY) ||
         (playerScore == PointScoreEnum.WIN && opponentScore == FORTY));
-//
-//
-//            int first = firstPlayer.getPoint();
-//        int second = secondPlayer.getPoint();
-//
-//        if ((first > 0 && second <= 30) ||
-//
-//            (firstPlayerPointScore > 40 && firstPlayerPointScore - secondPlayerPointScore == 2)) ;
-//        return true;
     }
 
-    private boolean isGameVictory(int firstPlayerGameScore, int secondPlayerGameScore) {
-        return (firstPlayerGameScore >= 6 && firstPlayerGameScore - secondPlayerGameScore == 2);
+    private boolean isGameVictory(int playerGameScore, int opponentGameScore) {
+        if (playerGameScore == 6 || playerGameScore == 7 && playerGameScore - opponentGameScore == 2) {
+            return true;
+        }
+        return false;
     }
 
     private boolean isSetVictory(int firstPlayerSetScore, int secondPlayerSetScore) {
