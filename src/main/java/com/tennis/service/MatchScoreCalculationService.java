@@ -77,7 +77,7 @@ public class MatchScoreCalculationService {
             updateScoreGames(playerScore, playerScoreGames);
 
             playerScoreGames = playerScore.getGames();
-//            opponentScoreGames = opponentScore.getGames();
+            opponentScoreGames = opponentScore.getGames();
         }
 
 
@@ -87,14 +87,19 @@ public class MatchScoreCalculationService {
 
             updateScoreSet(playerScore, playerScoreSets);
 
-            System.out.println("--*-*-*-*-*-*-*-*-*-*-*-*-*- win *- *-*-*-*-*- *-*- *-* -*");
-            return;
+            playerScoreSets = playerScore.getSets();
+            opponentScoreSets = opponentScore.getSets();
         }
 
-//        if (isSetVictory(playerScorePoints, opponentScorePoints)) {
-//            // redirect to winPage
-//            return;
-//        }
+        if (isSetVictory(playerScoreSets, opponentScoreSets)) {
+            System.out.println("*-*-*- *-* -*-*-*-*-*-* -* winnnnnnnn n ");
+            // redirect to winPage
+            return;
+        }
+    }
+
+    private boolean isSetVictory(int playerScoreSets, int opponentScoreSets) {
+        return (playerScoreSets - opponentScoreSets >= 2);
     }
 
     private boolean isGameVictory(int playerScoreGames, int opponentScoreGames) {
@@ -148,10 +153,6 @@ public class MatchScoreCalculationService {
     private boolean isPointVictory(PointScoreEnum playerScore, PointScoreEnum opponentScore) {
         return  ((playerScore == PointScoreEnum.ADVANTAGE && opponentScore != FORTY) ||
         (playerScore == PointScoreEnum.WIN && opponentScore == FORTY));
-    }
-
-    private boolean isSetVictory(int firstPlayerSetScore, int secondPlayerSetScore) {
-        return (firstPlayerSetScore - secondPlayerSetScore == 2);
     }
 
 
