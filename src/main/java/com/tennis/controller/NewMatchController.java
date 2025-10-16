@@ -56,16 +56,12 @@ public class NewMatchController extends HttpServlet {
                 ),
                 new Score(0,
                         0,
-                        PointScoreEnum.LOVE),
+                        PointScoreEnum.LOVE,
+                        0),
                 new Score(0,
                         0,
-                        PointScoreEnum.LOVE)
-//                0,
-//                0,
-//                0,
-//                0,
-//                PointScoreEnum.LOVE,
-//                PointScoreEnum.LOVE
+                        PointScoreEnum.LOVE,
+                        0)
         );
 
         ongoingMatchesService.setCurrentMatch(uuid, matchScoreModel);

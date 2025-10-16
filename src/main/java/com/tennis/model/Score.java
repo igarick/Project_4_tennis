@@ -11,6 +11,8 @@ public class Score {
     private int games;
     private PointScoreEnum points;
 
+    private int tieBreakPoints;
+
 //    private int firstPlayer;
 //    private int secondPlayer;
 }

@@ -46,17 +46,17 @@
                 </thead>
                 <tbody>
                 <tr class="player1">
-                    <%--                    <td class="table-text">Rafael Nadal</td>--%>
                     <td class="table-text">${firstPlayerName}</td>
                     <td class="table-text">${setScoreFirstPlayer}</td>
                     <td class="table-text">${gameScoreFirstPlayer}</td>
-                    <%--                    <td class="table-text">${pointScoreFirstPlayer}</td>--%>
                     <td class="table-text">${pointScoreFirstPlayer}</td>
+                    <td class="table-text">${tieBreakPointsScoreFirstPlayer}</td>
+
 
                     <td class="table-text">
-                        <%--                        <div class="score-btn">Score</div>--%>
                         <form method="post" action="match-score?uuid=${matchUuid}">
                             <input type="hidden" name="firstPlayerId" value="${firstPlayerId}"/>
+                            <input type="hidden" name="tieBreak" value="${isTieBreak}">
                             <button type="submit" class="score-btn">Score</button>
                         </form>
                     </td>
@@ -66,10 +66,12 @@
                     <td class="table-text">${setScoreSecondPlayer}</td>
                     <td class="table-text">${gameScoreSecondPlayer}</td>
                     <td class="table-text">${pointScoreSecondPlayer}</td>
+                    <td class="table-text">${tieBreakPointsScoreSecondPlayer}</td>
+
                     <td class="table-text">
-                        <%--                        <div class="score-btn">Score</div>--%>
                         <form method="post" action="match-score?uuid=${matchUuid}">
                             <input type="hidden" name="secondPlayerId" value="${secondPlayerId}">
+                            <input type="hidden" name="tieBreak" value="${isTieBreak}">
                             <button type="submit" class="score-btn">Score</button>
                         </form>
                     </td>

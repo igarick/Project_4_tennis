@@ -8,6 +8,12 @@ public class MatchScoreCalculationService {
     private static final PointScoreEnum FORTY = PointScoreEnum.FORTY;
     private static final PointScoreEnum ADVANTAGE = PointScoreEnum.ADVANTAGE;
 
+    private static boolean isTieBreak;
+
+    public static boolean isTieBreak() {
+        return isTieBreak;
+    }
+
     public void updateScore(String playerIdParam, MatchScoreModel currentMatch) {
         Integer playerId = Integer.parseInt(playerIdParam);
 
@@ -44,6 +50,10 @@ public class MatchScoreCalculationService {
     private void update(Score playerScore, Score opponentScore, MatchScoreModel currentMatch) {
 
         if (tieBreak(playerScore, opponentScore)) {
+            isTieBreak = true;
+
+            int updatedTieBreakPoints = playerScore.getTieBreakPoints() + 1;
+            playerScore.setTieBreakPoints(updatedTieBreakPoints);
 
 //            playerScore.setPoints();
 //            int delta = playerScoreGames - opponentScoreGames;
@@ -51,7 +61,16 @@ public class MatchScoreCalculationService {
 //                return;
 
         } else {
+            isTieBreak = false;
+
             addPoint(playerScore);
+        }
+
+        if (isTieBreakVictory(playerScore.getTieBreakPoints(), opponentScore.getTieBreakPoints())) {
+            playerScore.setTieBreakPoints(0);
+            opponentScore.setTieBreakPoints(0);
+
+            updateScoreGames(playerScore, playerScore.getGames());
         }
 
         int playerScoreSets = playerScore.getSets();
@@ -96,6 +115,10 @@ public class MatchScoreCalculationService {
             // redirect to winPage
             return;
         }
+    }
+
+    private boolean isTieBreakVictory(int playerTieBreakPoints, int opponentTieBreakPoints) {
+        return (playerTieBreakPoints >= 7 && (playerTieBreakPoints - opponentTieBreakPoints >= 2));
     }
 
     private boolean isSetVictory(int playerScoreSets, int opponentScoreSets) {
