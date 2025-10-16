@@ -8,11 +8,7 @@ public class MatchScoreCalculationService {
     private static final PointScoreEnum FORTY = PointScoreEnum.FORTY;
     private static final PointScoreEnum ADVANTAGE = PointScoreEnum.ADVANTAGE;
 
-    private static boolean isTieBreak;
-
-    public static boolean isTieBreak() {
-        return isTieBreak;
-    }
+    private static boolean isTieBreakGlobal;
 
     public void updateScore(String playerIdParam, MatchScoreModel currentMatch) {
         Integer playerId = Integer.parseInt(playerIdParam);
@@ -24,6 +20,8 @@ public class MatchScoreCalculationService {
             Score firstPlayerScore = currentMatch.getFirstPlayerScore();
             Score secondPlayerScore = currentMatch.getSecondPlayerScore();
 
+            addPoint(firstPlayerScore, secondPlayerScore);
+
             update(firstPlayerScore, secondPlayerScore, currentMatch);
         }
 
@@ -31,20 +29,34 @@ public class MatchScoreCalculationService {
             Score firstPlayerScore = currentMatch.getSecondPlayerScore();
             Score secondPlayerScore = currentMatch.getFirstPlayerScore();
 
+            addPoint(firstPlayerScore, secondPlayerScore);
+
             update(firstPlayerScore, secondPlayerScore, currentMatch);
+        }
+    }
+
+    private void addPoint(Score playerScore, Score opponentScore) {
+        if (isTieBreak(playerScore, opponentScore)) {
+            isTieBreakGlobal = true;
+            int updatedTieBreakPoints = playerScore.getTieBreakPoints() + 1;
+            playerScore.setTieBreakPoints(updatedTieBreakPoints);
+            addTieBreakPoint(playerScore);
+        } else {
+            isTieBreakGlobal = false;
+            addMatchPoint(playerScore);
         }
     }
 
     private void update(Score playerScore, Score opponentScore, MatchScoreModel currentMatch) {
 
-        if (tieBreak(playerScore, opponentScore)) {
-            isTieBreak = true;
-            int updatedTieBreakPoints = playerScore.getTieBreakPoints() + 1;
-            playerScore.setTieBreakPoints(updatedTieBreakPoints);
-        } else {
-            isTieBreak = false;
-            addPoint(playerScore);
-        }
+//        if (isTieBreak(playerScore, opponentScore)) {
+//            isTieBreakGlobal = true;
+//            int updatedTieBreakPoints = playerScore.getTieBreakPoints() + 1;
+//            playerScore.setTieBreakPoints(updatedTieBreakPoints);
+//        } else {
+//            isTieBreakGlobal = false;
+//            addPoint(playerScore);
+//        }
 
         if (isTieBreakVictory(playerScore.getTieBreakPoints(), opponentScore.getTieBreakPoints())) {
             playerScore.setTieBreakPoints(0);
@@ -96,36 +108,7 @@ public class MatchScoreCalculationService {
         }
     }
 
-    private boolean isTieBreakVictory(int playerTieBreakPoints, int opponentTieBreakPoints) {
-        return (playerTieBreakPoints >= 7 && (playerTieBreakPoints - opponentTieBreakPoints >= 2));
-    }
-
-    private boolean isSetVictory(int playerScoreSets, int opponentScoreSets) {
-        return ((playerScoreSets == 2 && (playerScoreSets - opponentScoreSets == 2)) ||
-                (playerScoreSets == 2 && (playerScoreSets - opponentScoreSets == 1)));
-    }
-
-    private boolean isGameVictory(int playerScoreGames, int opponentScoreGames) {
-        return ((playerScoreGames == 6 && (playerScoreGames - opponentScoreGames >= 2)) ||
-                (playerScoreGames == 7 && (playerScoreGames - opponentScoreGames == 2)) ||
-                (playerScoreGames == 7 && opponentScoreGames == 6));
-    }
-
-    private void updateScoreSet(Score playerScore, int playerScoreSets) {
-        int updatedScoreSet = playerScoreSets + 1;
-        playerScore.setSets(updatedScoreSet);
-    }
-
-    private boolean tieBreak(Score playerScore, Score opponentScore) {
-        return (playerScore.getGames() == 6 && opponentScore.getGames() == 6);
-    }
-
-    private void updateScoreGames(Score playerScore, int playerScoreGames) {
-        int updatedScoreGame = playerScoreGames + 1;
-        playerScore.setGames(updatedScoreGame);
-    }
-
-    private void addPoint(Score playerScore) {      //PointScoreEnum firstPlayerPoint
+    private void addMatchPoint(Score playerScore) {      //PointScoreEnum firstPlayerPoint
         PointScoreEnum point = playerScore.getPoints();
         switch (point) {
             case LOVE:
@@ -148,6 +131,29 @@ public class MatchScoreCalculationService {
         }
     }
 
+    private void addTieBreakPoint(Score playerScore) {
+        int updatedTieBreakPoints = playerScore.getTieBreakPoints() + 1;
+        playerScore.setTieBreakPoints(updatedTieBreakPoints);
+    }
+
+    private boolean isTieBreakVictory(int playerTieBreakPoints, int opponentTieBreakPoints) {
+        return (playerTieBreakPoints >= 7 && (playerTieBreakPoints - opponentTieBreakPoints >= 2));
+    }
+
+    private boolean isSetVictory(int playerScoreSets, int opponentScoreSets) {
+        return ((playerScoreSets == 2 && (playerScoreSets - opponentScoreSets == 2)) ||
+                (playerScoreSets == 2 && (playerScoreSets - opponentScoreSets == 1)));
+    }
+
+    private boolean isGameVictory(int playerScoreGames, int opponentScoreGames) {
+        return ((playerScoreGames == 6 && (playerScoreGames - opponentScoreGames >= 2)) ||
+                (playerScoreGames == 7 && (playerScoreGames - opponentScoreGames == 2)) ||
+                (playerScoreGames == 7 && opponentScoreGames == 6));
+    }
+
+    private boolean isTieBreak(Score playerScore, Score opponentScore) {
+        return (playerScore.getGames() == 6 && opponentScore.getGames() == 6);
+    }
 
     private boolean isDeuce(PointScoreEnum playerScore, PointScoreEnum opponentScore) {
         return (playerScore == ADVANTAGE && opponentScore == ADVANTAGE);
@@ -158,26 +164,18 @@ public class MatchScoreCalculationService {
                 (playerScore == PointScoreEnum.WIN && opponentScore == FORTY));
     }
 
+    public static boolean isTieBreak() {
+        return isTieBreakGlobal;
+    }
 
-    /*
-    Логика:
+    private void updateScoreSet(Score playerScore, int playerScoreSets) {
+        int updatedScoreSet = playerScoreSets + 1;
+        playerScore.setSets(updatedScoreSet);
+    }
 
-    - распарсить playerIdParam -> playerId
-    - сопоставить полученный ID с вложенными в currentMatch
-        достать Match -> Player -> (firstPlayerId and secondPlayerID)
+    private void updateScoreGames(Score playerScore, int playerScoreGames) {
+        int updatedScoreGame = playerScoreGames + 1;
+        playerScore.setGames(updatedScoreGame);
+    }
 
-        if (playerId == firstPlayerId) {
-        add point to Score (setScore, gameScore, pointScore) for firstPlayer
-        }
-
-        if (playerId == secondPlayerID) {
-        add point to Score (setScore, gameScore, pointScore) for secondPlayer
-        }
-    - add point
-    - checkers
-        - point
-        - game
-        - set
-    -
-     */
 }
