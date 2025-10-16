@@ -23,46 +23,26 @@ public class MatchScoreCalculationService {
         if (playerId.equals(firstPlayerId)) {
             Score firstPlayerScore = currentMatch.getFirstPlayerScore();
             Score secondPlayerScore = currentMatch.getSecondPlayerScore();
-//            PointScoreEnum firstPlayerPoint = currentMatch.getFirstPlayerScore().getPoints();
-//            PointScoreEnum secondPlayerPoint = currentMatch.getSecondPlayerPoints();
 
-//            addPoint(firstPlayerScore, currentMatch);
             update(firstPlayerScore, secondPlayerScore, currentMatch);
         }
 
         if (playerId.equals(secondPlayerId)) {
             Score firstPlayerScore = currentMatch.getSecondPlayerScore();
             Score secondPlayerScore = currentMatch.getFirstPlayerScore();
-//            PointScoreEnum firstPlayerPoint = currentMatch.getSecondPlayerPoints();
-//            PointScoreEnum secondPlayerPoint = currentMatch.getSecondPlayerScore().getPoints();
 
-//            addPoint(secondPlayerPoint, currentMatch);
-//            update(firstPlayerPoint, secondPlayerPoint, currentMatch);
-//            addPoint(firstPlayerScore, currentMatch);
             update(firstPlayerScore, secondPlayerScore, currentMatch);
-
-
         }
     }
-//    private void update(PointScoreEnum playerPoints,PointScoreEnum opponentPoints, MatchScoreModel currentMatch) {
 
-    //     private void update(Score firstPlayerScore,Score secondPlayerScore, MatchScoreModel currentMatch) {
     private void update(Score playerScore, Score opponentScore, MatchScoreModel currentMatch) {
 
         if (tieBreak(playerScore, opponentScore)) {
             isTieBreak = true;
-
             int updatedTieBreakPoints = playerScore.getTieBreakPoints() + 1;
             playerScore.setTieBreakPoints(updatedTieBreakPoints);
-
-//            playerScore.setPoints();
-//            int delta = playerScoreGames - opponentScoreGames;
-//            if(delta != 2) {
-//                return;
-
         } else {
             isTieBreak = false;
-
             addPoint(playerScore);
         }
 
@@ -80,7 +60,6 @@ public class MatchScoreCalculationService {
         int opponentScoreSets = opponentScore.getSets();
         int opponentScoreGames = opponentScore.getGames();
         PointScoreEnum opponentScorePoints = opponentScore.getPoints();
-
 
 
         if (isDeuce(playerScorePoints, opponentScorePoints)) {
@@ -122,13 +101,14 @@ public class MatchScoreCalculationService {
     }
 
     private boolean isSetVictory(int playerScoreSets, int opponentScoreSets) {
-        return (playerScoreSets - opponentScoreSets >= 2);
+        return ((playerScoreSets == 2 && (playerScoreSets - opponentScoreSets == 2)) ||
+                (playerScoreSets == 2 && (playerScoreSets - opponentScoreSets == 1)));
     }
 
     private boolean isGameVictory(int playerScoreGames, int opponentScoreGames) {
         return ((playerScoreGames == 6 && (playerScoreGames - opponentScoreGames >= 2)) ||
-            (playerScoreGames == 7 && (playerScoreGames - opponentScoreGames == 2)) ||
-            (playerScoreGames == 7 && opponentScoreGames == 6));
+                (playerScoreGames == 7 && (playerScoreGames - opponentScoreGames == 2)) ||
+                (playerScoreGames == 7 && opponentScoreGames == 6));
     }
 
     private void updateScoreSet(Score playerScore, int playerScoreSets) {
@@ -174,8 +154,8 @@ public class MatchScoreCalculationService {
     }
 
     private boolean isPointVictory(PointScoreEnum playerScore, PointScoreEnum opponentScore) {
-        return  ((playerScore == PointScoreEnum.ADVANTAGE && opponentScore != FORTY) ||
-        (playerScore == PointScoreEnum.WIN && opponentScore == FORTY));
+        return ((playerScore == PointScoreEnum.ADVANTAGE && opponentScore != FORTY) ||
+                (playerScore == PointScoreEnum.WIN && opponentScore == FORTY));
     }
 
 

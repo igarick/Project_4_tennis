@@ -1,56 +1,68 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Tennis Scoreboard | Home</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="css/style.css">
-
-    <script src="js/app.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+        }
+        header, footer {
+            background-color: #f0f0f0;
+            padding: 10px;
+        }
+        nav a {
+            margin-right: 15px;
+            text-decoration: none;
+            color: #333;
+        }
+        .container {
+            margin-top: 20px;
+        }
+        .button-link {
+            display: inline-block;
+            margin: 10px 0;
+        }
+        .button-link button {
+            padding: 8px 16px;
+            font-size: 14px;
+        }
+    </style>
 </head>
 <body>
-<header class="header">
-    <section class="nav-header">
-        <div class="brand">
-            <div class="nav-toggle">
-                <img src="images/menu.png" alt="Logo" class="logo">
-            </div>
-            <span class="logo-text">TennisScoreboard</span>
-        </div>
-        <div>
-            <nav class="nav-links">
-                <a class="nav-link" href="/">Home</a>
-                <a class="nav-link" href="matches.html">Matches</a>
-            </nav>
-        </div>
-    </section>
+
+<header>
+    <h2>TennisScoreboard</h2>
+    <nav>
+        <a href="/">Home</a>
+        <a href="matches.html">Matches</a>
+    </nav>
 </header>
-<main>
-    <div class="container">
-        <h1>Welcome to Tennis Scoreboard</h1>
-        <p>Manage your tennis matches, record results, and track rankings</p>
-        <div class="welcome-image"></div>
-        <div class="form-container center">
-            <a class="homepage-action-button" href="new-match">
-                <button class="btn start-match">
-                    Start a new match
-                </button>
+
+<div class="container">
+    <h1>Welcome to Tennis Scoreboard</h1>
+    <p>Manage your tennis matches, record results, and track rankings.</p>
+
+    <div>
+        <div class="button-link">
+            <a href="new-match">
+                <button>Start a new match</button>
             </a>
-            <a class="homepage-action-button" href="error.jsp">
-                <button class="btn view-results">
-                    View match results
-                </button>
+        </div>
+        <div class="button-link">
+            <a href="error.jsp">
+                <button>View match results</button>
             </a>
         </div>
     </div>
-</main>
+</div>
+
 <footer>
-    <div class="footer">
-        <p>&copy; Tennis Scoreboard, project from <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a> roadmap.</p>
-    </div>
+    <p>&copy; Tennis Scoreboard, project from
+        <a href="https://zhukovsd.github.io/java-backend-learning-course/">zhukovsd/java-backend-learning-course</a>
+    </p>
 </footer>
+
 </body>
 </html>
