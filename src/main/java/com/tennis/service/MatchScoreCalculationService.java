@@ -11,6 +11,15 @@ public class MatchScoreCalculationService {
     private static final PointScoreEnum WIN = PointScoreEnum.WIN;
     private static final PointScoreEnum LOVE = PointScoreEnum.LOVE;
 
+    private static final int SETS_TO_WIN = 2;
+    private static final int TIE_BREAK_POINTS_TO_WIN = 7;
+    private static final int POINTS_ADVANTAGE_FOR_WIN = 2;
+    private static final int AMOUNT_GAMES_FOR_TIE_BREAK = 6;
+    private static final int AMOUNT_GAMES_FOR_WIN_TILL_TIE_BREAK = 6;
+    private static final int AMOUNT_GAMES_FOR_WIN_AFTER_TIE_BREAK = 7;
+    private static final int MAX_AMOUNT_GAMES_WITHOUT_TIE_BREAK = 6;
+
+
     public void updateScore(String playerIdParam, MatchScoreModel currentMatch) {
         Integer playerId = Integer.parseInt(playerIdParam);
 
@@ -34,17 +43,16 @@ public class MatchScoreCalculationService {
 
             executeGameConditions(firstPlayerScore, secondPlayerScore, currentMatch);
         }
-
     }
 
-    private void addPoint(Score playerScore, Score opponentScore, MatchScoreModel currentMatch) {
-        boolean tieBreak = isTieBreak(playerScore, opponentScore);
+    private void addPoint(Score player, Score opponent, MatchScoreModel currentMatch) {
+        boolean tieBreak = isTieBreak(player, opponent);
         currentMatch.getMatch().setTieBreak(tieBreak);
 
         if (tieBreak) {
-            addTieBreakPoint(playerScore);
+            addTieBreakPoint(player);
         } else {
-            addMatchPoint(playerScore);
+            addMatchPoint(player);
         }
     }
 
@@ -59,32 +67,12 @@ public class MatchScoreCalculationService {
         handleSetVictory(playerScore, opponentScore, currentMatch);
     }
 
-    private void handleSetVictory(Score player, Score opponent, MatchScoreModel match) {
-        if (isSetVictory(player.getSets(), opponent.getSets())) {
-            Player player1 = match.getMatch().getPlayer1();
-            int firstPlayerSetScore = match.getFirstPlayerScore().getSets();
+    private void handleTieBreak(Score player, Score opponent) {
+        if (isTieBreakVictory(player.getTieBreakPoints(), opponent.getTieBreakPoints())) {
+            player.setTieBreakPoints(0);
+            opponent.setTieBreakPoints(0);
 
-            Player player2 = match.getMatch().getPlayer2();
-
-            int setsWin = 2;
-
-            Player winner;
-            if (firstPlayerSetScore == setsWin) {
-                winner = player1;
-            } else {
-                winner = player2;
-            }
-            match.getMatch().setWinner(winner);
-            match.getMatch().setFinished(true);
-        }
-    }
-
-    private void handleGameVictory(Score player, Score opponent) {
-        if (isGameVictory(player.getGames(), opponent.getGames())) {
-            player.setGames(0);
-            opponent.setGames(0);
-
-            incrementSetsScore(player);
+            incrementGameScore(player);
         }
     }
 
@@ -103,13 +91,36 @@ public class MatchScoreCalculationService {
         }
     }
 
-    private void handleTieBreak(Score player, Score opponent) {
-        if (isTieBreakVictory(player.getTieBreakPoints(), opponent.getTieBreakPoints())) {
-            player.setTieBreakPoints(0);
-            opponent.setTieBreakPoints(0);
+    private void handleGameVictory(Score player, Score opponent) {
+        if (isGameVictory(player.getGames(), opponent.getGames())) {
+            player.setGames(0);
+            opponent.setGames(0);
 
-            incrementGameScore(player);
+            incrementSetsScore(player);
         }
+    }
+
+    private void handleSetVictory(Score player, Score opponent, MatchScoreModel match) {
+        if (isSetVictory(player.getSets(), opponent.getSets())) {
+            Player winner = determineWinner(match);
+
+            match.getMatch().setWinner(winner);
+            match.getMatch().setFinished(true);
+        }
+    }
+
+    private Player determineWinner(MatchScoreModel match) {
+        Player player1 = match.getMatch().getPlayer1();
+        int firstPlayerSetScore = match.getFirstPlayerScore().getSets();
+        Player player2 = match.getMatch().getPlayer2();
+
+        Player winner;
+        if (firstPlayerSetScore == SETS_TO_WIN) {
+            winner = player1;
+        } else {
+            winner = player2;
+        }
+        return winner;
     }
 
     private void addMatchPoint(Score player) {
@@ -141,21 +152,25 @@ public class MatchScoreCalculationService {
     }
 
     private boolean isTieBreakVictory(int playerTieBreakPoints, int opponentTieBreakPoints) {
-        return (playerTieBreakPoints >= 7 && (playerTieBreakPoints - opponentTieBreakPoints >= 2));
+        return (playerTieBreakPoints >= TIE_BREAK_POINTS_TO_WIN &&
+                (playerTieBreakPoints - opponentTieBreakPoints >= POINTS_ADVANTAGE_FOR_WIN));
     }
 
     private boolean isSetVictory(int playerSetScore, int opponentSetScore) {
-        return (playerSetScore == 2 && (playerSetScore > opponentSetScore));
+        return (playerSetScore == SETS_TO_WIN && (playerSetScore > opponentSetScore));
     }
 
     private boolean isGameVictory(int playerGameScore, int opponentGameScore) {
-        return ((playerGameScore == 6 && (playerGameScore - opponentGameScore >= 2)) ||
-                (playerGameScore == 7 && (playerGameScore - opponentGameScore == 2)) ||
-                (playerGameScore == 7 && opponentGameScore == 6));
+        return ((playerGameScore == AMOUNT_GAMES_FOR_WIN_TILL_TIE_BREAK &&
+                 (playerGameScore - opponentGameScore >= POINTS_ADVANTAGE_FOR_WIN)) ||
+                (playerGameScore == AMOUNT_GAMES_FOR_WIN_AFTER_TIE_BREAK &&
+                 (playerGameScore - opponentGameScore == POINTS_ADVANTAGE_FOR_WIN)) ||
+                (playerGameScore == AMOUNT_GAMES_FOR_WIN_AFTER_TIE_BREAK && opponentGameScore == MAX_AMOUNT_GAMES_WITHOUT_TIE_BREAK));
     }
 
     private boolean isTieBreak(Score player, Score opponent) {
-        return (player.getGames() == 6 && opponent.getGames() == 6);
+        return (player.getGames() == AMOUNT_GAMES_FOR_TIE_BREAK &&
+                opponent.getGames() == AMOUNT_GAMES_FOR_TIE_BREAK);
     }
 
     private boolean isBothAdvantage(PointScoreEnum playerPointScore, PointScoreEnum opponentPointScore) {
