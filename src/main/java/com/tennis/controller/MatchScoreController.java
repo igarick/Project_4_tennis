@@ -54,6 +54,12 @@ public class MatchScoreController extends HttpServlet {
         String firstPlayerIdParam = req.getParameter("firstPlayerId");
         String secondPlayerIdParam = req.getParameter("secondPlayerId");
 
+        System.out.println(("************contollrt**************"));
+        System.out.println(firstPlayerIdParam);
+        System.out.println(secondPlayerIdParam);
+        System.out.println(("************contollrt**************"));
+
+
         if (firstPlayerIdParam != null) {
             matchScoreCalculationService.updateScore(firstPlayerIdParam, currentMatch);
         }
@@ -62,7 +68,7 @@ public class MatchScoreController extends HttpServlet {
             matchScoreCalculationService.updateScore(secondPlayerIdParam, currentMatch);
         }
 
-        boolean isTieBreak = currentMatch.isTieBreak();
+        boolean isTieBreak = currentMatch.getMatch().isTieBreak();
 
 //        if (isTieBreak) {
 //            req.setAttribute("tieBreakPointsScoreFirstPlayer", currentMatch.getFirstPlayerScore().getTieBreakPoints());
@@ -92,7 +98,14 @@ public class MatchScoreController extends HttpServlet {
 
 //        req.setAttribute("isTieBreak", isTieBreak);
         req.setAttribute("matchUuid", uuidParam);
-        req.getRequestDispatcher("match-score.jsp").forward(req, resp);
+
+        boolean finished = currentMatch.getMatch().isFinished();
+        if (finished) {
+            req.setAttribute("winnerName", currentMatch.getMatch().getWinner().getName());
+            req.getRequestDispatcher("match-finished.jsp").forward(req, resp);
+        } else {
+            req.getRequestDispatcher("match-score.jsp").forward(req, resp);
+        }
     }
 
     /*

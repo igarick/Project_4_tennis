@@ -69,11 +69,7 @@
             <td>${firstPlayerName}</td>
             <td>${setScoreFirstPlayer}</td>
             <td>${gameScoreFirstPlayer}</td>
-            <td>
-                <%-- class="table-text"               ${isTieBreak ? tieBreakPointsScoreFirstPlayer : pointScoreFirstPlayer}--%>
-                ${pointScoreFirstPlayer}
-
-            </td>
+            <td>${pointScoreFirstPlayer}</td>
             <td>
                 <form method="post" action="match-score?uuid=${matchUuid}">
                     <input type="hidden" name="firstPlayerId" value="${firstPlayerId}"/>
@@ -86,13 +82,7 @@
             <td>${secondPlayerName}</td>
             <td>${setScoreSecondPlayer}</td>
             <td>${gameScoreSecondPlayer}</td>
-            <td>
-<%--            <td class="table-text">--%>
-
-            <%--                ${isTieBreak ? tieBreakPointsScoreSecondPlayer : pointScoreSecondPlayer}--%>
-                ${pointScoreSecondPlayer}
-
-            </td>
+            <td>${pointScoreSecondPlayer}</td>
             <td>
                 <form method="post" action="match-score?uuid=${matchUuid}">
                     <input type="hidden" name="secondPlayerId" value="${secondPlayerId}">

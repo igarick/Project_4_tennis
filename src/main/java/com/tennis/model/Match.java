@@ -29,4 +29,8 @@ public class Match {
     @ManyToOne
     @JoinColumn(name = "WINNER")
     private Player winner;
+
+    private boolean isTieBreak;
+
+    private boolean isFinished;
 }
