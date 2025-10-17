@@ -37,9 +37,9 @@ public class MatchScoreController extends HttpServlet {
         req.setAttribute("setScoreSecondPlayer", currentMatch.getSecondPlayerScore().getSets());
         req.setAttribute("gameScoreSecondPlayer", currentMatch.getSecondPlayerScore().getGames());
 
-        boolean isTieBreak = false;
+//        boolean isTieBreak = false;
 
-        req.setAttribute("isTieBreak", isTieBreak);
+//        req.setAttribute("isTieBreak", isTieBreak);
         req.setAttribute("matchUuid", uuidParam);
         req.getRequestDispatcher("match-score.jsp").forward(req, resp);
     }
@@ -62,11 +62,19 @@ public class MatchScoreController extends HttpServlet {
             matchScoreCalculationService.updateScore(secondPlayerIdParam, currentMatch);
         }
 
-        boolean isTieBreak = MatchScoreCalculationService.isTieBreak();
+        boolean isTieBreak = currentMatch.isTieBreak();
+
+//        if (isTieBreak) {
+//            req.setAttribute("tieBreakPointsScoreFirstPlayer", currentMatch.getFirstPlayerScore().getTieBreakPoints());
+//            req.setAttribute("tieBreakPointsScoreSecondPlayer", currentMatch.getSecondPlayerScore().getTieBreakPoints());
+//        } else {
+//            req.setAttribute("pointScoreFirstPlayer", currentMatch.getFirstPlayerScore().getPoints().displayPoint());
+//            req.setAttribute("pointScoreSecondPlayer", currentMatch.getSecondPlayerScore().getPoints().displayPoint());
+//        }
 
         if (isTieBreak) {
-            req.setAttribute("tieBreakPointsScoreFirstPlayer", currentMatch.getFirstPlayerScore().getTieBreakPoints());
-            req.setAttribute("tieBreakPointsScoreSecondPlayer", currentMatch.getSecondPlayerScore().getTieBreakPoints());
+            req.setAttribute("pointScoreFirstPlayer", currentMatch.getFirstPlayerScore().getTieBreakPoints());
+            req.setAttribute("pointScoreSecondPlayer", currentMatch.getSecondPlayerScore().getTieBreakPoints());
         } else {
             req.setAttribute("pointScoreFirstPlayer", currentMatch.getFirstPlayerScore().getPoints().displayPoint());
             req.setAttribute("pointScoreSecondPlayer", currentMatch.getSecondPlayerScore().getPoints().displayPoint());
@@ -82,7 +90,7 @@ public class MatchScoreController extends HttpServlet {
         req.setAttribute("setScoreSecondPlayer", currentMatch.getSecondPlayerScore().getSets());
         req.setAttribute("gameScoreSecondPlayer", currentMatch.getSecondPlayerScore().getGames());
 
-        req.setAttribute("isTieBreak", isTieBreak);
+//        req.setAttribute("isTieBreak", isTieBreak);
         req.setAttribute("matchUuid", uuidParam);
         req.getRequestDispatcher("match-score.jsp").forward(req, resp);
     }

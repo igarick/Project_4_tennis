@@ -8,28 +8,34 @@
             font-family: Arial, sans-serif;
             margin: 20px;
         }
+
         header, footer {
             background-color: #f0f0f0;
             padding: 10px;
         }
+
         nav a {
             margin-right: 15px;
             text-decoration: none;
             color: #333;
         }
+
         .container {
             margin-top: 20px;
         }
+
         table {
             width: 100%;
             border-collapse: collapse;
             margin-top: 15px;
         }
+
         th, td {
             border: 1px solid #ccc;
             padding: 8px;
             text-align: left;
         }
+
         .score-btn {
             padding: 6px 12px;
         }
@@ -63,8 +69,10 @@
             <td>${firstPlayerName}</td>
             <td>${setScoreFirstPlayer}</td>
             <td>${gameScoreFirstPlayer}</td>
-            <td class="table-text">
-                ${isTieBreak ? tieBreakPointsScoreFirstPlayer : pointScoreFirstPlayer}
+            <td>
+                <%-- class="table-text"               ${isTieBreak ? tieBreakPointsScoreFirstPlayer : pointScoreFirstPlayer}--%>
+                ${pointScoreFirstPlayer}
+
             </td>
             <td>
                 <form method="post" action="match-score?uuid=${matchUuid}">
@@ -78,8 +86,12 @@
             <td>${secondPlayerName}</td>
             <td>${setScoreSecondPlayer}</td>
             <td>${gameScoreSecondPlayer}</td>
-            <td class="table-text">
-                ${isTieBreak ? tieBreakPointsScoreSecondPlayer : pointScoreSecondPlayer}
+            <td>
+<%--            <td class="table-text">--%>
+
+            <%--                ${isTieBreak ? tieBreakPointsScoreSecondPlayer : pointScoreSecondPlayer}--%>
+                ${pointScoreSecondPlayer}
+
             </td>
             <td>
                 <form method="post" action="match-score?uuid=${matchUuid}">
