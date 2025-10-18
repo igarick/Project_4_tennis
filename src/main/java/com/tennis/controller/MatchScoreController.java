@@ -61,11 +61,11 @@ public class MatchScoreController extends HttpServlet {
 
 
         if (firstPlayerIdParam != null) {
-            matchScoreCalculationService.updateScore(firstPlayerIdParam, currentMatch);
+            matchScoreCalculationService.calculate(firstPlayerIdParam, currentMatch);
         }
 
         if (secondPlayerIdParam != null) {
-            matchScoreCalculationService.updateScore(secondPlayerIdParam, currentMatch);
+            matchScoreCalculationService.calculate(secondPlayerIdParam, currentMatch);
         }
 
         boolean isTieBreak = currentMatch.getMatch().isTieBreak();
