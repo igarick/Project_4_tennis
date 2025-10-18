@@ -37,9 +37,6 @@ public class MatchScoreController extends HttpServlet {
         req.setAttribute("setScoreSecondPlayer", currentMatch.getSecondPlayerScore().getSets());
         req.setAttribute("gameScoreSecondPlayer", currentMatch.getSecondPlayerScore().getGames());
 
-//        boolean isTieBreak = false;
-
-//        req.setAttribute("isTieBreak", isTieBreak);
         req.setAttribute("matchUuid", uuidParam);
         req.getRequestDispatcher("match-score.jsp").forward(req, resp);
     }
@@ -54,12 +51,6 @@ public class MatchScoreController extends HttpServlet {
         String firstPlayerIdParam = req.getParameter("firstPlayerId");
         String secondPlayerIdParam = req.getParameter("secondPlayerId");
 
-        System.out.println(("************contollrt**************"));
-        System.out.println(firstPlayerIdParam);
-        System.out.println(secondPlayerIdParam);
-        System.out.println(("************contollrt**************"));
-
-
         if (firstPlayerIdParam != null) {
             matchScoreCalculationService.calculate(firstPlayerIdParam, currentMatch);
         }
@@ -69,14 +60,6 @@ public class MatchScoreController extends HttpServlet {
         }
 
         boolean isTieBreak = currentMatch.getMatch().isTieBreak();
-
-//        if (isTieBreak) {
-//            req.setAttribute("tieBreakPointsScoreFirstPlayer", currentMatch.getFirstPlayerScore().getTieBreakPoints());
-//            req.setAttribute("tieBreakPointsScoreSecondPlayer", currentMatch.getSecondPlayerScore().getTieBreakPoints());
-//        } else {
-//            req.setAttribute("pointScoreFirstPlayer", currentMatch.getFirstPlayerScore().getPoints().displayPoint());
-//            req.setAttribute("pointScoreSecondPlayer", currentMatch.getSecondPlayerScore().getPoints().displayPoint());
-//        }
 
         if (isTieBreak) {
             req.setAttribute("pointScoreFirstPlayer", currentMatch.getFirstPlayerScore().getTieBreakPoints());
@@ -96,12 +79,14 @@ public class MatchScoreController extends HttpServlet {
         req.setAttribute("setScoreSecondPlayer", currentMatch.getSecondPlayerScore().getSets());
         req.setAttribute("gameScoreSecondPlayer", currentMatch.getSecondPlayerScore().getGames());
 
-//        req.setAttribute("isTieBreak", isTieBreak);
         req.setAttribute("matchUuid", uuidParam);
 
         boolean finished = currentMatch.getMatch().isFinished();
         if (finished) {
             req.setAttribute("winnerName", currentMatch.getMatch().getWinner().getName());
+
+            ongoingMatchesService.removeCurrentMatch(uuid);
+
             req.getRequestDispatcher("match-finished.jsp").forward(req, resp);
         } else {
             req.getRequestDispatcher("match-score.jsp").forward(req, resp);

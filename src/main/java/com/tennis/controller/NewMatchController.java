@@ -66,25 +66,9 @@ public class NewMatchController extends HttpServlet {
                         0)
         );
 
-        ongoingMatchesService.setCurrentMatch(uuid, matchScoreModel);
+        ongoingMatchesService.writeCurrentMatch(uuid, matchScoreModel);
 
         resp.sendRedirect("match-score?uuid=" + uuid);
-
-        /*
-        +++ Создаём экземпляр класса, содержащего
-        +++ айди игроков
-        +++ и текущий счёт,
-
-        +++ и кладём в коллекцию текущих матчей
-        (существующую только в памяти приложения, либо в key-value storage).
-        Ключом коллекции является UUID, значением - счёт в матче
-
-        +++ Редирект на страницу /match-score?uuid=$match_id
-         */
-
-        System.out.println(firstPlayer);
-        System.out.println(secondPlayer);
-
     }
 }
 

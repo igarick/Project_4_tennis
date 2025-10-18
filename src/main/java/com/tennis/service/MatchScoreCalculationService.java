@@ -1,18 +1,19 @@
 package com.tennis.service;
 
-import com.tennis.model.MatchScoreModel;
-import com.tennis.model.Player;
-import com.tennis.model.PointScoreEnum;
-import com.tennis.model.Score;
+import com.tennis.dto.MatchDto;
+import com.tennis.model.*;
 import com.tennis.service.point.PointIncrementRule;
 import com.tennis.service.victory.*;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class MatchScoreCalculationService {
     private static final PointIncrementRule pointIncrementRule = new PointIncrementRule();
     private static final TieBreak tieBreak = new TieBreak();
     private static final PointVictoryAndAdvantage pointVictory = new PointVictoryAndAdvantage();
     private static final GameVictory gameVictory = new GameVictory();
     private static final SetVictoryAndWinner setVictoryAndWinner = new SetVictoryAndWinner();
+    private static final FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
 
 
     public void calculate(String playerIdParam, MatchScoreModel currentMatch) {
@@ -53,6 +54,8 @@ public class MatchScoreCalculationService {
 
             Player player = setVictoryAndWinner.determineWinner(currentMatch);
             currentMatch.getMatch().setWinner(player);
+
+            finishedMatchesPersistenceService.save(currentMatch.getMatch());
         }
     }
 }

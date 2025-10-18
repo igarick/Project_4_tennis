@@ -30,7 +30,9 @@ public class Match {
     @JoinColumn(name = "WINNER")
     private Player winner;
 
+    @Transient
     private boolean isTieBreak;
 
+    @Transient
     private boolean isFinished;
 }

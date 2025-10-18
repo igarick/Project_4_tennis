@@ -1,5 +1,6 @@
 package com.tennis.dao;
 
+import com.tennis.dto.MatchDto;
 import com.tennis.model.Match;
 import com.tennis.util.SessionManager;
 import org.hibernate.HibernateException;
