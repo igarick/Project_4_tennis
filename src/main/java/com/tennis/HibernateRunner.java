@@ -1,10 +1,9 @@
 package com.tennis;
 
-import com.tennis.model.Player;
+import com.tennis.entity.Player;
 import com.tennis.util.SessionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.cfg.Configuration;
 import org.hibernate.exception.ConstraintViolationException;
 
 public class HibernateRunner {

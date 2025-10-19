@@ -1,26 +1,27 @@
 package com.tennis.service;
 
-import com.tennis.dto.MatchDto;
 import com.tennis.model.*;
 import com.tennis.service.point.PointIncrementRule;
 import com.tennis.service.victory.*;
+import com.tennis.entity.Match;
+import com.tennis.entity.Player;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class MatchScoreCalculationService {
     private static final PointIncrementRule pointIncrementRule = new PointIncrementRule();
     private static final TieBreak tieBreak = new TieBreak();
-    private static final PointVictoryAndAdvantage pointVictory = new PointVictoryAndAdvantage();
-    private static final GameVictory gameVictory = new GameVictory();
-    private static final SetVictoryAndWinner setVictoryAndWinner = new SetVictoryAndWinner();
+    private static final PointsVictoryAndAdvantage pointsVictoryAndAdvantage = new PointsVictoryAndAdvantage();
+    private static final GamesVictory gamesVictory = new GamesVictory();
+    private static final SetsVictoryAndWinner setsVictoryAndWinner = new SetsVictoryAndWinner();
     private static final FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
 
 
     public void calculate(String playerIdParam, MatchScoreModel currentMatch) {
         Integer playerId = Integer.parseInt(playerIdParam);
 
-        Integer firstPlayerId = currentMatch.getMatch().getPlayer1().getId();
-        Integer secondPlayerId = currentMatch.getMatch().getPlayer2().getId();
+        Integer firstPlayerId = currentMatch.getMatchModel().getPlayer1().getId();
+        Integer secondPlayerId = currentMatch.getMatchModel().getPlayer2().getId();
 
         if (playerId.equals(firstPlayerId)) {
             Score player = currentMatch.getFirstPlayerScore();
@@ -40,22 +41,30 @@ public class MatchScoreCalculationService {
     private void updateScoreState(Score playerScore, Score opponentScore, MatchScoreModel currentMatch) {
         pointIncrementRule.incrementPlayerPoint(playerScore, opponentScore, currentMatch);
 
-        if (currentMatch.getMatch().isTieBreak()) {
+        if (currentMatch.getMatchModel().isTieBreak()) {
             tieBreak.handleTieBreak(playerScore, opponentScore);
         } else {
-            pointVictory.handleNormalGame(playerScore, opponentScore);
+            pointsVictoryAndAdvantage.handleNormalGame(playerScore, opponentScore);
         }
 
-        gameVictory.handleGameVictory(playerScore, opponentScore);
+        gamesVictory.handleGameVictory(playerScore, opponentScore);
 
-        boolean isSetVictory = setVictoryAndWinner.isSetVictory(playerScore.getSets(), opponentScore.getSets());
-        if (isSetVictory) {
-            currentMatch.getMatch().setFinished(true);
+        boolean victory = setsVictoryAndWinner.isSetVictory(playerScore.getSets(), opponentScore.getSets());
+        if (victory) {
+            currentMatch.getMatchModel().setFinished(true);
 
-            Player player = setVictoryAndWinner.determineWinner(currentMatch);
-            currentMatch.getMatch().setWinner(player);
+            Player player = setsVictoryAndWinner.determineWinner(currentMatch);
+            currentMatch.getMatchModel().setWinner(player);
 
-            finishedMatchesPersistenceService.save(currentMatch.getMatch());
+            Match match = new Match(
+                    null,
+                    currentMatch.getMatchModel().getPlayer1(),
+                    currentMatch.getMatchModel().getPlayer2(),
+                    currentMatch.getMatchModel().getWinner()
+            );
+
+            finishedMatchesPersistenceService.save(match);
+
         }
     }
 }

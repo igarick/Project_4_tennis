@@ -1,4 +1,4 @@
-package com.tennis.model;
+package com.tennis.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;

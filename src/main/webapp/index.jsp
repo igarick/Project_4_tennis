@@ -36,7 +36,7 @@
     <h2>TennisScoreboard</h2>
     <nav>
         <a href="/">Home</a>
-        <a href="matches.html">Matches</a>
+        <a href="matches">Matches</a>
     </nav>
 </header>
 
@@ -51,7 +51,7 @@
             </a>
         </div>
         <div class="button-link">
-            <a href="error.jsp">
+            <a href="WEB-INF/jsp/error.jsp">
                 <button>View match results</button>
             </a>
         </div>

@@ -3,7 +3,7 @@ package com.tennis.service.victory;
 import com.tennis.model.PointScoreEnum;
 import com.tennis.model.Score;
 
-public class PointVictoryAndAdvantage {
+public class PointsVictoryAndAdvantage {
     private static final PointScoreEnum FORTY = PointScoreEnum.FORTY;
     private static final PointScoreEnum ADVANTAGE = PointScoreEnum.ADVANTAGE;
     private static final PointScoreEnum WIN = PointScoreEnum.WIN;

@@ -3,6 +3,7 @@ package com.tennis.controller;
 import com.tennis.model.MatchScoreModel;
 import com.tennis.service.MatchScoreCalculationService;
 import com.tennis.service.OngoingMatchesService;
+import com.tennis.util.JspHelper;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -14,6 +15,9 @@ import java.util.UUID;
 
 @WebServlet("/match-score")
 public class MatchScoreController extends HttpServlet {
+    private static final String MATCH_SCORE_JSP = "match-score";
+    private static final String MATCH_FINISHED_JSP = "match-finished";
+
     private static final OngoingMatchesService ongoingMatchesService = new OngoingMatchesService();
     private static final MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService();
 
@@ -27,18 +31,18 @@ public class MatchScoreController extends HttpServlet {
         req.setAttribute("pointScoreFirstPlayer", currentMatch.getFirstPlayerScore().getPoints().displayPoint());
         req.setAttribute("pointScoreSecondPlayer", currentMatch.getSecondPlayerScore().getPoints().displayPoint());
 
-        req.setAttribute("firstPlayerName", currentMatch.getMatch().getPlayer1().getName());
-        req.setAttribute("firstPlayerId", currentMatch.getMatch().getPlayer1().getId());
+        req.setAttribute("firstPlayerName", currentMatch.getMatchModel().getPlayer1().getName());
+        req.setAttribute("firstPlayerId", currentMatch.getMatchModel().getPlayer1().getId());
         req.setAttribute("setScoreFirstPlayer", currentMatch.getFirstPlayerScore().getSets());
         req.setAttribute("gameScoreFirstPlayer", currentMatch.getFirstPlayerScore().getGames());
 
-        req.setAttribute("secondPlayerName", currentMatch.getMatch().getPlayer2().getName());
-        req.setAttribute("secondPlayerId", currentMatch.getMatch().getPlayer2().getId());
+        req.setAttribute("secondPlayerName", currentMatch.getMatchModel().getPlayer2().getName());
+        req.setAttribute("secondPlayerId", currentMatch.getMatchModel().getPlayer2().getId());
         req.setAttribute("setScoreSecondPlayer", currentMatch.getSecondPlayerScore().getSets());
         req.setAttribute("gameScoreSecondPlayer", currentMatch.getSecondPlayerScore().getGames());
 
         req.setAttribute("matchUuid", uuidParam);
-        req.getRequestDispatcher("match-score.jsp").forward(req, resp);
+        req.getRequestDispatcher(JspHelper.getPath(MATCH_SCORE_JSP)).forward(req, resp);
     }
 
     @Override
@@ -59,7 +63,7 @@ public class MatchScoreController extends HttpServlet {
             matchScoreCalculationService.calculate(secondPlayerIdParam, currentMatch);
         }
 
-        boolean isTieBreak = currentMatch.getMatch().isTieBreak();
+        boolean isTieBreak = currentMatch.getMatchModel().isTieBreak();
 
         if (isTieBreak) {
             req.setAttribute("pointScoreFirstPlayer", currentMatch.getFirstPlayerScore().getTieBreakPoints());
@@ -69,27 +73,27 @@ public class MatchScoreController extends HttpServlet {
             req.setAttribute("pointScoreSecondPlayer", currentMatch.getSecondPlayerScore().getPoints().displayPoint());
         }
 
-        req.setAttribute("firstPlayerName", currentMatch.getMatch().getPlayer1().getName());
-        req.setAttribute("firstPlayerId", currentMatch.getMatch().getPlayer1().getId());
+        req.setAttribute("firstPlayerName", currentMatch.getMatchModel().getPlayer1().getName());
+        req.setAttribute("firstPlayerId", currentMatch.getMatchModel().getPlayer1().getId());
         req.setAttribute("setScoreFirstPlayer", currentMatch.getFirstPlayerScore().getSets());
         req.setAttribute("gameScoreFirstPlayer", currentMatch.getFirstPlayerScore().getGames());
 
-        req.setAttribute("secondPlayerName", currentMatch.getMatch().getPlayer2().getName());
-        req.setAttribute("secondPlayerId", currentMatch.getMatch().getPlayer2().getId());
+        req.setAttribute("secondPlayerName", currentMatch.getMatchModel().getPlayer2().getName());
+        req.setAttribute("secondPlayerId", currentMatch.getMatchModel().getPlayer2().getId());
         req.setAttribute("setScoreSecondPlayer", currentMatch.getSecondPlayerScore().getSets());
         req.setAttribute("gameScoreSecondPlayer", currentMatch.getSecondPlayerScore().getGames());
 
         req.setAttribute("matchUuid", uuidParam);
 
-        boolean finished = currentMatch.getMatch().isFinished();
+        boolean finished = currentMatch.getMatchModel().isFinished();
         if (finished) {
-            req.setAttribute("winnerName", currentMatch.getMatch().getWinner().getName());
+            req.setAttribute("winnerName", currentMatch.getMatchModel().getWinner().getName());
 
             ongoingMatchesService.removeCurrentMatch(uuid);
 
-            req.getRequestDispatcher("match-finished.jsp").forward(req, resp);
+            req.getRequestDispatcher(JspHelper.getPath(MATCH_FINISHED_JSP)).forward(req, resp);
         } else {
-            req.getRequestDispatcher("match-score.jsp").forward(req, resp);
+            req.getRequestDispatcher(JspHelper.getPath(MATCH_SCORE_JSP)).forward(req, resp);
         }
     }
 

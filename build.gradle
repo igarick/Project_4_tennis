@@ -8,6 +8,11 @@ version '1.0-SNAPSHOT'
 
 repositories {
     mavenCentral()
+
+    // для JSP
+    maven {
+        url 'https://repo.eclipse.org/content/groups/ee4j/'
+    }
 }
 
 ext {
@@ -32,7 +37,15 @@ dependencies {
     compileOnly('jakarta.servlet:jakarta.servlet-api:6.1.0')
     implementation 'jakarta.persistence:jakarta.persistence-api:3.1.0'
     implementation 'org.slf4j:slf4j-api:2.0.17'
-//    implementation 'javax.servlet:jstl:1.2'
+
+//----------------------  JSP  ----------------------
+    implementation 'jakarta.el:jakarta.el-api:6.0.1'
+    implementation 'jakarta.servlet.jsp.jstl:jakarta.servlet.jsp.jstl-api:3.0.2'
+    implementation 'org.glassfish.web:jakarta.servlet.jsp.jstl:3.0.0'
+//----------------------------------------------------
+
+
+    implementation 'org.glassfish.expressly:expressly:6.0.0'
 
 
     implementation 'jakarta.activation:jakarta.activation-api:2.1.1'

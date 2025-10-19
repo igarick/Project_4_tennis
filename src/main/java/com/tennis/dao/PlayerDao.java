@@ -1,6 +1,6 @@
 package com.tennis.dao;
 
-import com.tennis.model.Player;
+import com.tennis.entity.Player;
 import com.tennis.util.SessionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -28,12 +28,12 @@ public class PlayerDao {
             if (transaction != null) {
                 transaction.rollback();
             }
+            throw new RuntimeException("Ошибка при поиске игрока", e);
         } finally {
             if (session != null) {
                 session.close();
             }
         }
-        return List.of();
     }
 
     public Player save(String name) {

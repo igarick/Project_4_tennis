@@ -2,12 +2,11 @@ package com.tennis.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 
 @Data
 @AllArgsConstructor
 public class MatchScoreModel {
-    private Match match;
+    private MatchModel matchModel;
     private Score firstPlayerScore;
     private Score secondPlayerScore;
 }

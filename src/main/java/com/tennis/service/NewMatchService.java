@@ -2,7 +2,7 @@ package com.tennis.service;
 
 import com.tennis.dao.PlayerDao;
 import com.tennis.dto.PlayerDto;
-import com.tennis.model.Player;
+import com.tennis.entity.Player;
 
 import java.util.List;
 

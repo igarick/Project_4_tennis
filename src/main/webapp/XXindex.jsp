@@ -23,7 +23,7 @@
         <div>
             <nav class="nav-links">
                 <a class="nav-link" href="/">Home</a>
-                <a class="nav-link" href="matches.html">Matches</a>
+                <a class="nav-link" href="WEB-INF/jsp/matches.jsp">Matches</a>
             </nav>
         </div>
     </section>
@@ -39,7 +39,7 @@
                     Start a new match
                 </button>
             </a>
-            <a class="homepage-action-button" href="error.jsp">
+            <a class="homepage-action-button" href="WEB-INF/jsp/error.jsp">
                 <button class="btn view-results">
                     View match results
                 </button>

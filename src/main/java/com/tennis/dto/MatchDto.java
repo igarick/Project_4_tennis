@@ -1,6 +1,6 @@
 package com.tennis.dto;
 
-import com.tennis.model.Player;
+import com.tennis.entity.Player;
 
-public record MatchDto (Integer ID, Player PLAYER1, Player PLAYER2, Player WINNER) {
+public record MatchDto(Integer ID, Player player1, Player player2, Player winner) {
 }

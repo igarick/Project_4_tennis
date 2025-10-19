@@ -1,4 +1,4 @@
-package com.tennis.model;
+package com.tennis.entity;
 
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
@@ -29,10 +29,4 @@ public class Match {
     @ManyToOne
     @JoinColumn(name = "WINNER")
     private Player winner;
-
-    @Transient
-    private boolean isTieBreak;
-
-    @Transient
-    private boolean isFinished;
 }

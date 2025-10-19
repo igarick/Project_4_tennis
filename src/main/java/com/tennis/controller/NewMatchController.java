@@ -4,7 +4,9 @@ import com.tennis.dto.PlayerDto;
 import com.tennis.model.*;
 import com.tennis.service.NewMatchService;
 import com.tennis.service.OngoingMatchesService;
+import com.tennis.util.JspHelper;
 import com.tennis.validator.RequestValidator;
+import com.tennis.entity.Player;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -17,14 +19,14 @@ import java.util.UUID;
 
 @WebServlet("/new-match")
 public class NewMatchController extends HttpServlet {
-    private static final String NEW_MATCH_PATH = "new-match.jsp";
-    private static final String ERROR_PAGE = "error.jsp";
+    private static final String NEW_MATCH_JSP = "new-match";
+//    private static final String ERROR_PAGE = "error.jsp";
     private static final NewMatchService newMatchService = new NewMatchService();
     private static final OngoingMatchesService ongoingMatchesService = new OngoingMatchesService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
+        req.getRequestDispatcher(JspHelper.getPath(NEW_MATCH_JSP)).forward(req, resp);
     }
 
     @Override
@@ -35,7 +37,7 @@ public class NewMatchController extends HttpServlet {
         Optional<String> errorMessage = RequestValidator.validateParam(parameter1, parameter2);
         if (errorMessage.isPresent()) {
             req.setAttribute("error", errorMessage.get());
-            req.getRequestDispatcher(NEW_MATCH_PATH).forward(req, resp);
+            req.getRequestDispatcher(JspHelper.getPath(NEW_MATCH_JSP)).forward(req, resp);
             return;
         }
 
@@ -48,7 +50,7 @@ public class NewMatchController extends HttpServlet {
         UUID uuid = UUID.randomUUID();
 
         MatchScoreModel matchScoreModel = new MatchScoreModel(
-                new Match(
+                new MatchModel(
                         null,
                         firstPlayer,
                         secondPlayer,

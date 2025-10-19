@@ -16,7 +16,7 @@
     <property name="current_session_context_class">thread</property>
 
     <!-- сначала property потом в конце mapping-->
-    <mapping class="com.tennis.model.Player"/>
-    <mapping class="com.tennis.model.Match"/>
+    <mapping class="com.tennis.entity.Player"/>
+    <mapping class="com.tennis.entity.Match"/>
   </session-factory>
 </hibernate-configuration>

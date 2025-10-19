@@ -9,7 +9,7 @@ public class PointIncrementRule {
 
     public void incrementPlayerPoint(Score player, Score opponent, MatchScoreModel currentMatch) {
         boolean tieBreak = isTieBreak(player, opponent);
-        currentMatch.getMatch().setTieBreak(tieBreak);
+        currentMatch.getMatchModel().setTieBreak(tieBreak);
 
         if (tieBreak) {
             incrementTieBreakPoint(player);

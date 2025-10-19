@@ -2,7 +2,7 @@ package com.tennis.service.victory;
 
 import com.tennis.model.Score;
 
-public class GameVictory {
+public class GamesVictory {
     private static final int ADVANTAGE_POINTS_FOR_WIN = 2;
     private static final int AMOUNT_GAMES_FOR_WIN_TILL_TIE_BREAK = 6;
     private static final int AMOUNT_GAMES_FOR_WIN_AFTER_TIE_BREAK = 7;

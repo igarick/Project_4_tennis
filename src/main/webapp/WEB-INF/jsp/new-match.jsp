@@ -48,7 +48,7 @@
     <h2>TennisScoreboard</h2>
     <nav>
         <a href="/">Home</a>
-        <a href="matches.html">Matches</a>
+        <a href="matches">Matches</a>
     </nav>
 </header>
 
