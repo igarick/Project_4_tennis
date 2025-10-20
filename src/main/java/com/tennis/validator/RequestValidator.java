@@ -1,7 +1,10 @@
 package com.tennis.validator;
 
+import lombok.experimental.UtilityClass;
+
 import java.util.Optional;
 
+@UtilityClass
 public class RequestValidator {
 
     private static final String EMPTY_FIELD_ERROR = "All fields must be filled in";
@@ -14,14 +17,13 @@ public class RequestValidator {
             return Optional.of(EMPTY_FIELD_ERROR);
         }
 
-        if (!isValidFormat(firstName, secondName)) {
+        if (!isValidFormat(firstName) || !isValidFormat(secondName)) {
             return Optional.of(NAME_ERROR);
         }
 
         if (firstName.equals(secondName)) {
             return Optional.of(IDENTICAL_NAMES_ERROR);
         }
-
         return Optional.empty();
     }
 
@@ -30,8 +32,8 @@ public class RequestValidator {
         || (firstName.isBlank() || secondName.isBlank()));
     }
 
-    private static boolean isValidFormat(String firstName, String secondName) {
-        return (firstName.matches(NAME_PATTERN) && secondName.matches(NAME_PATTERN));
+    public static boolean isValidFormat(String name) {
+        return (name.matches(NAME_PATTERN));
     }
 
 }
