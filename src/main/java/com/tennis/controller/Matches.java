@@ -20,9 +20,18 @@ public class Matches extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<MatchDto> matches = finishedMatchesPersistenceService.findAll();
 
-        req.setAttribute("matches", matches);
+        String paramFilter = req.getParameter("filter_by_player_name");
+
+        // валидация имени -----!!!!!!
+
+        if (paramFilter == null) {
+            List<MatchDto> matches = finishedMatchesPersistenceService.findAll();
+            req.setAttribute("matches", matches);
+        } else {
+            List<MatchDto> matchesByName = finishedMatchesPersistenceService.findByName(paramFilter);
+            req.setAttribute("matches", matchesByName);
+        }
 
         req.getRequestDispatcher(JspHelper.getPath(MATCHES_JSP)).forward(req, resp);
     }

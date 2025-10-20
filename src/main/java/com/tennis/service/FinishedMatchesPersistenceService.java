@@ -18,8 +18,13 @@ public class FinishedMatchesPersistenceService {
                 .stream()
                 .map(this::buildMatchDto)
                 .toList();
+    }
 
-//        return matchDao.findAll();
+    public List<MatchDto> findByName(String name) {
+        return matchDao.findByName(name)
+                .stream()
+                .map(this::buildMatchDto)
+                .toList();
     }
 
     private MatchDto buildMatchDto(Match match) {

@@ -36,12 +36,16 @@
     <div class="container">
         <h1>Matches</h1>
         <div class="input-container">
-            <input class="input-filter" placeholder="Filter by name" type="text"/>
+            <form method="get" action="matches">
+            <input class="input-filter" placeholder="Filter by name" type="text"
+            name="filter_by_player_name" value="${paramFilter}" />
+                <button type="submit" class="btn-filter">Apply</button>
             <div>
-                <a href="#">
-                    <button class="btn-filter">Reset Filter</button>
+                <a href="matches">
+                    <button type="button" class="btn-filter">Reset Filter</button>
                 </a>
             </div>
+            </form>
         </div>
 
         <table class="table-matches">
