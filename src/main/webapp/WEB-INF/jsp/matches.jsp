@@ -77,9 +77,9 @@
         </table>
 
         <div class="pagination">
-            <a class="prev" href="#"> < </a>
-            <a class="num-page current" href="#">1</a>
-            <a class="num-page" href="#">2</a>
+            <a class="prev" href="matches?page=1&filter_by_player_name=${paramFilter}"> < </a>
+            <a class="num-page current" href="matches?page=1&filter_by_player_name=${paramFilter}">1</a>
+            <a class="num-page" href="matches?page=1&filter_by_player_name=${paramFilter}">2</a>
             <a class="num-page" href="#">3</a>
             <a class="next" href="#"> > </a>
         </div>

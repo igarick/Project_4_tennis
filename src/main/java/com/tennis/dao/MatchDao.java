@@ -6,6 +6,7 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 
 import java.util.List;
 
@@ -33,7 +34,7 @@ public class MatchDao {
         }
     }
 
-    public List<Match> findAll() {
+    public List<Match> findAll(int numberPage, int pageSize) {
         Session session = null;
         Transaction transaction = null;
         try {
@@ -41,11 +42,21 @@ public class MatchDao {
             session = factory.getCurrentSession();
             transaction = session.beginTransaction();
 
-            List<Match> matches = session.createQuery("from Match", Match.class)
-                    .list();
+//            int numberPage = 2;
+//            int pageSize = 3;
+//            Query<Long> countQuery = session.createQuery("SELECT count (m.ID) FROM Match m", Long.class);
+//            Long countResult = countQuery.uniqueResult();
+//            int lastPage = (int) Math.ceil((double) countResult / pageSize);
+
+            Query<Match> selectQuery = session.createQuery("FROM Match ORDER BY ID asc", Match.class);
+            selectQuery.setFirstResult(pageSize * (numberPage - 1));
+            selectQuery.setMaxResults(pageSize);
+//            selectQuery.setFirstResult((lastPage - 1) * pageSize);
+//            selectQuery.setMaxResults(pageSize);
+
+            List<Match> matches = selectQuery.list();
 
             transaction.commit();
-
             return matches;
         } catch (Exception e) {
             if (transaction != null) {
@@ -59,6 +70,32 @@ public class MatchDao {
         }
     }
 
+//    public List<Match> findAll() {
+//        Session session = null;
+//        Transaction transaction = null;
+//        try {
+//            SessionFactory factory = SessionManager.getSessionFactory();
+//            session = factory.getCurrentSession();
+//            transaction = session.beginTransaction();
+//
+//            List<Match> matches = session.createQuery("from Match", Match.class)
+//                    .list();
+//
+//            transaction.commit();
+//
+//            return matches;
+//        } catch (Exception e) {
+//            if (transaction != null) {
+//                transaction.rollback();
+//            }
+//            throw new RuntimeException("Ошибка получения матчей", e);
+//        } finally {
+//            if (session != null) {
+//                session.close();
+//            }
+//        }
+//    }
+
     public List<Match> findByName(String name) {
         Session session = null;
         Transaction transaction = null;
@@ -69,7 +106,7 @@ public class MatchDao {
             transaction = session.beginTransaction();
 
             List<Match> matches = session.createQuery("FROM Match m WHERE m.player1.name = :name OR " +
-                                "m.player2.name = :name", Match.class)
+                                                      "m.player2.name = :name", Match.class)
                     .setParameter("name", name)
                     .list();
 

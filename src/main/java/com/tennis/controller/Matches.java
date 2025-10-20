@@ -28,8 +28,11 @@ public class Matches extends HttpServlet {
         String paramFilter = req.getParameter("filter_by_player_name");
         List<MatchDto> matches = List.of();
 
+        int numberPage = 1;
+        int pageSize = 3;
+
         if (paramFilter == null) {
-            matches = finishedMatchesPersistenceService.findAll();
+            matches = finishedMatchesPersistenceService.findAll(numberPage, pageSize);
             req.setAttribute("matches", matches);
         } else if (!RequestValidator.isValidFormat(paramFilter)) {
             req.setAttribute("error", NAME_ERROR);
@@ -37,6 +40,16 @@ public class Matches extends HttpServlet {
             PlayerNameDto nameDto = new PlayerNameDto(paramFilter);
             matches = finishedMatchesPersistenceService.findByName(nameDto);
         }
+
+
+
+
+//        int pageSize = 3;
+//        Long countPages = (long) matches.size();
+//        int lastPage = (int) Math.ceil((double) countPages / pageSize);
+
+
+
 
         req.setAttribute("matches", matches);
         req.getRequestDispatcher(JspHelper.getPath(MATCHES_JSP)).forward(req, resp);
