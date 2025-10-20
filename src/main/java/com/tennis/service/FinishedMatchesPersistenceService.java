@@ -2,6 +2,7 @@ package com.tennis.service;
 
 import com.tennis.dao.MatchDao;
 import com.tennis.dto.MatchDto;
+import com.tennis.dto.PlayerNameDto;
 import com.tennis.entity.Match;
 
 import java.util.List;
@@ -20,7 +21,9 @@ public class FinishedMatchesPersistenceService {
                 .toList();
     }
 
-    public List<MatchDto> findByName(String name) {
+    public List<MatchDto> findByName(PlayerNameDto dto) {
+        String name = dto.name();
+
         return matchDao.findByName(name)
                 .stream()
                 .map(this::buildMatchDto)

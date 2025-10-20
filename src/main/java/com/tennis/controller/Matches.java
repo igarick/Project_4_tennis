@@ -1,6 +1,7 @@
 package com.tennis.controller;
 
 import com.tennis.dto.MatchDto;
+import com.tennis.dto.PlayerNameDto;
 import com.tennis.service.FinishedMatchesPersistenceService;
 import com.tennis.util.JspHelper;
 import com.tennis.validator.RequestValidator;
@@ -33,7 +34,8 @@ public class Matches extends HttpServlet {
         } else if (!RequestValidator.isValidFormat(paramFilter)) {
             req.setAttribute("error", NAME_ERROR);
         } else {
-            matches = finishedMatchesPersistenceService.findByName(paramFilter);
+            PlayerNameDto nameDto = new PlayerNameDto(paramFilter);
+            matches = finishedMatchesPersistenceService.findByName(nameDto);
         }
 
         req.setAttribute("matches", matches);
