@@ -21,10 +21,10 @@ public class FinishedMatchesPersistenceService {
                 .toList();
     }
 
-    public List<MatchDto> findByName(PlayerNameDto dto) {
+    public List<MatchDto> findByName(PlayerNameDto dto, int offset, int limit) {
         String name = dto.name();
 
-        return matchDao.findByName(name)
+        return matchDao.findByName(name, offset, limit)
                 .stream()
                 .map(this::buildMatchDto)
                 .toList();

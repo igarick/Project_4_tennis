@@ -95,6 +95,64 @@ public class MatchDao {
         }
     }
 
+    public List<Match> findByName(String name, int offset, int limit) {
+        Session session = null;
+        Transaction transaction = null;
+
+        try {
+            SessionFactory factory = SessionManager.getSessionFactory();
+            session = factory.getCurrentSession();
+            transaction = session.beginTransaction();
+
+            Query<Match> selectQuery = session.createQuery("FROM Match m WHERE m.player1.name = :name OR " +
+                                                      "m.player2.name = :name", Match.class)
+                    .setParameter("name", name);
+            selectQuery.setFirstResult(offset);
+            selectQuery.setMaxResults(limit);
+            List<Match> matches = selectQuery.list();
+
+            transaction.commit();
+            return matches;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Ошибка получения матчей по фильтру", e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
+    public Long countIdByName(String name) {
+        Session session = null;
+        Transaction transaction = null;
+
+        try {
+            SessionFactory factory = SessionManager.getSessionFactory();
+            session = factory.getCurrentSession();
+            transaction = session.beginTransaction();
+
+            Query<Long> countQuery = session.createQuery("SELECT count (m.ID) FROM Match m " +
+                                                         "WHERE m.player1.name = :name OR " +
+                                                         "m.player2.name = :name", Long.class)
+                    .setParameter("name", name);
+            Long result = countQuery.uniqueResult();
+            transaction.commit();
+            return result;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Ошибка получения матчей по фильтру", e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
 
 //    public List<Match> findAll() {
 //        Session session = null;
@@ -122,31 +180,31 @@ public class MatchDao {
 //        }
 //    }
 
-    public List<Match> findByName(String name) {
-        Session session = null;
-        Transaction transaction = null;
-
-        try {
-            SessionFactory factory = SessionManager.getSessionFactory();
-            session = factory.getCurrentSession();
-            transaction = session.beginTransaction();
-
-            List<Match> matches = session.createQuery("FROM Match m WHERE m.player1.name = :name OR " +
-                                                      "m.player2.name = :name", Match.class)
-                    .setParameter("name", name)
-                    .list();
-
-            transaction.commit();
-            return matches;
-        } catch (Exception e) {
-            if (transaction != null) {
-                transaction.rollback();
-            }
-            throw new RuntimeException("Ошибка получения матчей по фильтру", e);
-        } finally {
-            if (session != null) {
-                session.close();
-            }
-        }
-    }
+//    public List<Match> findByName(String name) {
+//        Session session = null;
+//        Transaction transaction = null;
+//
+//        try {
+//            SessionFactory factory = SessionManager.getSessionFactory();
+//            session = factory.getCurrentSession();
+//            transaction = session.beginTransaction();
+//
+//            List<Match> matches = session.createQuery("FROM Match m WHERE m.player1.name = :name OR " +
+//                                                      "m.player2.name = :name", Match.class)
+//                    .setParameter("name", name)
+//                    .list();
+//
+//            transaction.commit();
+//            return matches;
+//        } catch (Exception e) {
+//            if (transaction != null) {
+//                transaction.rollback();
+//            }
+//            throw new RuntimeException("Ошибка получения матчей по фильтру", e);
+//        } finally {
+//            if (session != null) {
+//                session.close();
+//            }
+//        }
+//    }
 }

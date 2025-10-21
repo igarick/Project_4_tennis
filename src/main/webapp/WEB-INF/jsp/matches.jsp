@@ -141,24 +141,25 @@
       </c:if>
 
       <c:if test="${currentPage > 1}">
-          <a class="prev" href="matches?page=${currentPage - 1}">&lt;</a>
+          <a class="prev" href="matches?page=${currentPage - 1}&filter_by_player_name=${paramFilter}">&lt;</a>
       </c:if>
 
-      <c:if test="${endPage < totalPages}">
-          <a class="next" href="matches?page=${currentPage + 1}">&gt;</a>
-      </c:if>
+
 
       <c:forEach var="i" begin="${startPage}" end="${endPage}">
           <c:choose>
               <c:when test="${i == currentPage}">
-                  <a class="num-page current" href="matches?page=${i}">${i}</a>
+                  <a class="num-page current" href="matches?page=${i}&filter_by_player_name=${paramFilter}">${i}</a>
               </c:when>
               <c:otherwise>
-                  <a class="num-page" href="matches?page=${i}">${i}</a>
+                  <a class="num-page" href="matches?page=${i}&filter_by_player_name=${paramFilter}">${i}</a>
               </c:otherwise>
           </c:choose>
       </c:forEach>
 
+      <c:if test="${endPage < totalPages}">
+          <a class="next" href="matches?page=${currentPage + 1}&filter_by_player_name=${paramFilter}">&gt;</a>
+      </c:if>
 
   <%--    <a href="match-finished?page=${currentPage - 1}&filter=${param.filter}">&lt;</a>--%>
 <%--    <a href="match-finished?page=1&filter=${param.filter}" class="${currentPage == 1 ? 'current' : ''}">1</a>--%>
@@ -170,11 +171,3 @@
 
 </body>
 </html>
-
-
-<%--Что нужно на сервере--%>
-<%--Передать currentPage как request.setAttribute("currentPage", pageNumber)--%>
-
-<%--Передать finishedMatches как список--%>
-
-<%--Обработать filter и page в контроллере--%>

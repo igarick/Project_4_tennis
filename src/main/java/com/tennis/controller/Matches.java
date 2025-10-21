@@ -30,7 +30,6 @@ public class Matches extends HttpServlet {
         String paramFilter = req.getParameter("filter_by_player_name");
         List<MatchDto> matches = List.of();
 
-
         if (paramFilter == null) {      // если
             String paramPage = req.getParameter("page");
 
@@ -38,30 +37,24 @@ public class Matches extends HttpServlet {
             if (paramPage == null) {
                 currentPage = 1;
             } else {
-                Long page = Long.parseLong(paramPage);
+                long page = Long.parseLong(paramPage);
                 currentPage = Math.toIntExact(page);
             }
 
-//            if (page == null) {
-//                currentPage = 1;
-//            } else {
-//                currentPage = Math.toIntExact(page);
-//            }
-
             int pageSize = 3;
 
-            int offset = (pageSize * (currentPage - 1) + 1);
+            int offset = (pageSize * (currentPage - 1));
             int limit = (pageSize);
 
             matches = finishedMatchesPersistenceService.findAll(offset, limit);
             Long amountId = paginationService.countId();
 
-            System.out.println(("****************************"));
-            int size = matches.size();
-            System.out.println("всего лист матчей" + size);
-
-            System.out.println("всего ид матчей" + amountId);
-            System.out.println(("****************************"));
+//            System.out.println(("****************************"));
+//            int size = matches.size();
+//            System.out.println("всего лист матчей" + size);
+//
+//            System.out.println("всего ид матчей" + amountId);
+//            System.out.println(("****************************"));
 
             int totalPages = (int) Math.ceil((double) amountId / pageSize);
 
@@ -73,15 +66,48 @@ public class Matches extends HttpServlet {
             req.setAttribute("error", NAME_ERROR);
         } else {
             PlayerNameDto nameDto = new PlayerNameDto(paramFilter);
-            matches = finishedMatchesPersistenceService.findByName(nameDto);
+
+            String paramPage = req.getParameter("page");
+
+            int currentPage;
+            if (paramPage == null) {
+                currentPage = 1;
+            } else {
+                long l = Long.parseLong(paramPage);
+                currentPage = Math.toIntExact(l);
+            }
+
+            int pageSize = 3;
+
+            int offset = (pageSize * (currentPage - 1));
+            int limit = (pageSize);
+
+            matches = finishedMatchesPersistenceService.findByName(nameDto, offset, limit);
+            Long amountId = paginationService.countIdByName(nameDto);
+
+//            System.out.println(("****************************"));
+//            int size = matches.size();
+//            System.out.println("всего лист матчей" + size);
+//
+//            System.out.println("всего ид матчей" + amountId);
+//            System.out.println(("****************************"));
+
+            int totalPages = (int) Math.ceil((double) amountId / pageSize);
+
+            req.setAttribute("paramFilter", paramFilter);
+            req.setAttribute("totalPages", totalPages);
+            req.setAttribute("matches", matches);
+            req.setAttribute("currentPage", currentPage);
+
         }
-
-
-//        int pageSize = 3;
-//        Long countPages = (long) matches.size();
-//        int lastPage = (int) Math.ceil((double) countPages / pageSize);
 
         req.setAttribute("matches", matches);
         req.getRequestDispatcher(JspHelper.getPath(MATCHES_JSP)).forward(req, resp);
     }
+
+//
+//    if (paramFilter == null && paramPage == null) {
+//        resp.sendRedirect(req.getContextPath() + "/matches?page=1");
+//        return;
+//    }
 }
