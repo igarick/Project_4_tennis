@@ -2,7 +2,6 @@ package com.tennis.dao;
 
 import com.tennis.entity.Match;
 import com.tennis.util.SessionManager;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -34,7 +33,7 @@ public class MatchDao {
         }
     }
 
-    public List<Match> findAll(int numberPage, int pageSize) {
+    public List<Match> findAll(int offset, int limit) {
         Session session = null;
         Transaction transaction = null;
         try {
@@ -49,8 +48,8 @@ public class MatchDao {
 //            int lastPage = (int) Math.ceil((double) countResult / pageSize);
 
             Query<Match> selectQuery = session.createQuery("FROM Match ORDER BY ID asc", Match.class);
-            selectQuery.setFirstResult(pageSize * (numberPage - 1));
-            selectQuery.setMaxResults(pageSize);
+            selectQuery.setFirstResult(offset);
+            selectQuery.setMaxResults(limit);
 //            selectQuery.setFirstResult((lastPage - 1) * pageSize);
 //            selectQuery.setMaxResults(pageSize);
 
@@ -69,6 +68,33 @@ public class MatchDao {
             }
         }
     }
+
+    public Long countId() {
+        Session session = null;
+        Transaction transaction = null;
+        try {
+            SessionFactory factory = SessionManager.getSessionFactory();
+            session = factory.getCurrentSession();
+            transaction = session.beginTransaction();
+
+            Query<Long> countQuery = session.createQuery("SELECT count (m.ID) FROM Match m", Long.class);
+            Long result = countQuery.uniqueResult();
+
+
+            transaction.commit();
+            return result;
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+            }
+            throw new RuntimeException("Ошибка получения матчей", e);
+        } finally {
+            if (session != null) {
+                session.close();
+            }
+        }
+    }
+
 
 //    public List<Match> findAll() {
 //        Session session = null;

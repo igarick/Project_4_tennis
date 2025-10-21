@@ -14,8 +14,8 @@ public class FinishedMatchesPersistenceService {
         matchDao.save(match);
     }
 
-    public List<MatchDto> findAll(int numberPage, int pageSize) {
-        return matchDao.findAll(numberPage, pageSize)
+    public List<MatchDto> findAll(int offset, int limit) {
+        return matchDao.findAll(offset, limit)
                 .stream()
                 .map(this::buildMatchDto)
                 .toList();
