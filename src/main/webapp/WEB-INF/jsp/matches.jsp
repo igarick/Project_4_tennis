@@ -87,11 +87,15 @@
 
     <div class="input-container">
         <form method="get" action="matches">
-            <% String error = (String) request.getAttribute("error"); %>
-            <% if (error != null) { %>
-            <p class="error"><%= error %>
-            </p>
-            <% } %>
+            <c:if test="${not empty error}">
+                <p class="error">"${error}"</p>
+            </c:if>
+
+<%--            <% String error = (String) request.getAttribute("error"); %>--%>
+<%--            <% if (error != null) { %>--%>
+<%--            <p class="error"><%= error %>--%>
+<%--            </p>--%>
+<%--            <% } %>--%>
             <input class="input-filter" placeholder="Filter by name" type="text"
                    name="filter_by_player_name" value="${paramFilter}"/>
             <button type="submit" class="btn-filter">Apply</button>
