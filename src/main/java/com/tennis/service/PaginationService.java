@@ -6,12 +6,12 @@ import com.tennis.dto.PlayerNameDto;
 public class PaginationService {
     MatchDao matchDao = new MatchDao();
 
-    public Long countId() {
-        return matchDao.countId();
+    public Long countMatches() {
+        return matchDao.countMatches();
     }
 
-    public Long countIdByName(PlayerNameDto dto) {
-        return matchDao.countIdByName(dto.name());
+    public Long countPlayersByName(PlayerNameDto dto) {
+        return matchDao.countPlayersByName(dto.name());
     }
 
 }

@@ -13,6 +13,8 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 @WebServlet("/matches")
@@ -21,93 +23,52 @@ public class Matches extends HttpServlet {
 
     private static final String NAME_ERROR = "The name must be 1 - 15 English letters";
 
+    private static final int LIMIT = 3;
+
     private static final FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
     private static final PaginationService paginationService = new PaginationService();
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-
         String paramFilter = req.getParameter("filter_by_player_name");
+        String paramPage = req.getParameter("page");
+
         List<MatchDto> matches = List.of();
 
-        if (paramFilter == null) {      // если
-            String paramPage = req.getParameter("page");
-
-            int currentPage;
-            if (paramPage == null) {
-                currentPage = 1;
+        if (paramPage == null) {
+            if (paramFilter == null || paramFilter.isBlank()) {
+                resp.sendRedirect("matches?page=1");
             } else {
-                long page = Long.parseLong(paramPage);
-                currentPage = Math.toIntExact(page);
+                resp.sendRedirect("matches?page=1&filter_by_player_name="
+                                  + URLEncoder.encode(paramFilter, StandardCharsets.UTF_8));
             }
+            return;
+        }
 
-            int pageSize = 3;
+        long l = Long.parseLong(paramPage);
+        int currentPage = Math.toIntExact(l);
+        long amount = 0;
 
-            int offset = (pageSize * (currentPage - 1));
-            int limit = (pageSize);
+        int offset = (LIMIT * (currentPage - 1));
 
-            matches = finishedMatchesPersistenceService.findAll(offset, limit);
-            Long amountId = paginationService.countId();
-
-//            System.out.println(("****************************"));
-//            int size = matches.size();
-//            System.out.println("всего лист матчей" + size);
-//
-//            System.out.println("всего ид матчей" + amountId);
-//            System.out.println(("****************************"));
-
-            int totalPages = (int) Math.ceil((double) amountId / pageSize);
-
-            req.setAttribute("totalPages", totalPages);
-            req.setAttribute("matches", matches);
-            req.setAttribute("currentPage", currentPage);
-
+        if (paramFilter == null || paramFilter.isBlank()) {
+            matches = finishedMatchesPersistenceService.findAll(offset, LIMIT);
+            amount = paginationService.countMatches();
         } else if (!RequestValidator.isValidFormat(paramFilter)) {
             req.setAttribute("error", NAME_ERROR);
         } else {
             PlayerNameDto nameDto = new PlayerNameDto(paramFilter);
 
-            String paramPage = req.getParameter("page");
-
-            int currentPage;
-            if (paramPage == null) {
-                currentPage = 1;
-            } else {
-                long l = Long.parseLong(paramPage);
-                currentPage = Math.toIntExact(l);
-            }
-
-            int pageSize = 3;
-
-            int offset = (pageSize * (currentPage - 1));
-            int limit = (pageSize);
-
-            matches = finishedMatchesPersistenceService.findByName(nameDto, offset, limit);
-            Long amountId = paginationService.countIdByName(nameDto);
-
-//            System.out.println(("****************************"));
-//            int size = matches.size();
-//            System.out.println("всего лист матчей" + size);
-//
-//            System.out.println("всего ид матчей" + amountId);
-//            System.out.println(("****************************"));
-
-            int totalPages = (int) Math.ceil((double) amountId / pageSize);
+            matches = finishedMatchesPersistenceService.findByName(nameDto, offset, LIMIT);
+            amount = paginationService.countPlayersByName(nameDto);
 
             req.setAttribute("paramFilter", paramFilter);
-            req.setAttribute("totalPages", totalPages);
-            req.setAttribute("matches", matches);
-            req.setAttribute("currentPage", currentPage);
-
         }
+        int totalPages = (int) Math.ceil((double) amount / LIMIT);
 
+        req.setAttribute("totalPages", totalPages);
+        req.setAttribute("currentPage", currentPage);
         req.setAttribute("matches", matches);
         req.getRequestDispatcher(JspHelper.getPath(MATCHES_JSP)).forward(req, resp);
     }
-
-//
-//    if (paramFilter == null && paramPage == null) {
-//        resp.sendRedirect(req.getContextPath() + "/matches?page=1");
-//        return;
-//    }
 }
