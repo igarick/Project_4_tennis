@@ -21,9 +21,7 @@ public class FinishedMatchesPersistenceService {
                 .toList();
     }
 
-    public List<MatchDto> findByName(PlayerNameDto dto, int offset, int limit) {
-        String name = dto.name();
-
+    public List<MatchDto> findByName(String name, int offset, int limit) {
         return matchDao.findByName(name, offset, limit)
                 .stream()
                 .map(this::buildMatchDto)

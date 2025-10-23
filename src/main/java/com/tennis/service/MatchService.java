@@ -1,57 +1,40 @@
 package com.tennis.service;
 
 import com.tennis.dao.MatchDao;
-import com.tennis.dto.MatchesPaginationDto;
-import com.tennis.dto.MatchDto;
-import com.tennis.dto.PageDto;
-import com.tennis.dto.PlayerNameDto;
+import com.tennis.dto.*;
 
 import java.util.List;
 
 public class MatchService {
     private static final int LIMIT = 3;
 
-    MatchDao matchDao = new MatchDao();
-
     private static final FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
-    private static final PaginationService paginationService = new PaginationService();
+    private static final MatchDao matchDao = new MatchDao();
 
+    public MatchesPaginationDto determineParamPaginationForMatches(RequestMatchParamsDto paramsDto) {
+        long l = Long.parseLong(paramsDto.page());
+        int currentPage = Math.toIntExact(l);
+        String name = paramsDto.name();
 
-    public MatchesPaginationDto determineParamPaginationForMatches(PageDto currentPageDto, PlayerNameDto nameDto) {
-
-//        long l = Long.parseLong(paramPage);
-//        int currentPage = Math.toIntExact(l);
-        int currentPage = currentPageDto.page();
-        String name = nameDto.name();
+        int offset = (LIMIT * (currentPage - 1));
 
         long amount = 0;
         List<MatchDto> matches = List.of();
 
-        int offset = (LIMIT * (currentPage - 1));
-
         if (name == null || name.isBlank()) {
             matches = finishedMatchesPersistenceService.findAll(offset, LIMIT);
-            amount = matchDao.countMatches(); // paginationService.countMatches();
+            amount = matchDao.countMatches();
         } else {
-//            PlayerNameDto nameDto = new PlayerNameDto(paramFilter);
-
-            matches = finishedMatchesPersistenceService.findByName(nameDto, offset, LIMIT);
-            amount = matchDao.countPlayersByName(name); //paginationService.countPlayersByName(nameDto);
-
-            req.setAttribute("paramFilter", paramFilter);
+            matches = finishedMatchesPersistenceService.findByName(name, offset, LIMIT);
+            amount = matchDao.countPlayersByName(name);
         }
-
         int totalPages = (int) Math.ceil((double) amount / LIMIT);
 
-
-
-        MatchesPaginationDto dto = new MatchesPaginationDto(
+        return new MatchesPaginationDto(
                 totalPages,
                 currentPage,
                 amount,
                 matches
         );
-
-        return dto;
     }
 }
