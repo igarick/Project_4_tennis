@@ -8,8 +8,8 @@ import java.util.Optional;
 public class RequestValidator {
     private static final String EMPTY_FIELD_ERROR = "All fields must be filled in";
     private static final String IDENTICAL_NAMES_ERROR = "Names must be different";
-    private static final String NAME_ERROR = "The name must be 1 - 15 English letters";
-    private static final String NAME_PATTERN = "[a-zA-Z ]{1,15}";
+    public static final String NAME_ERROR = "The name must be 2 - 20 English letters";
+    private static final String NAME_PATTERN = "[a-zA-Z ]{2,20}";
 
     public static Optional<String> validateParam(String firstName, String secondName) {
         if (isEmpty(firstName, secondName)) {

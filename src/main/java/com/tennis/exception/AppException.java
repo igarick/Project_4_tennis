@@ -10,4 +10,8 @@ public abstract class AppException extends RuntimeException {
         super(cause);
         this.errorInfo = errorInfo;
     }
+
+    public AppException(ErrorInfo errorInfo) {
+        this.errorInfo = errorInfo;
+    }
 }
