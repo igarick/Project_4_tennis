@@ -1,6 +1,8 @@
 package com.tennis.dao;
 
 import com.tennis.entity.Match;
+import com.tennis.exception.DaoException;
+import com.tennis.exception.ErrorInfo;
 import com.tennis.util.SessionManager;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -25,7 +27,7 @@ public class MatchDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Ошибка при сохранении матча", e);
+            throw new DaoException(ErrorInfo.SAVING_TO_DATABASE_FAILED, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -53,7 +55,7 @@ public class MatchDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Ошибка получения матчей", e);
+            throw new DaoException(ErrorInfo.RETRIEVING_FROM_DATABASE_FAILED, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -83,7 +85,7 @@ public class MatchDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Ошибка получения матчей по фильтру", e);
+            throw new DaoException(ErrorInfo.RETRIEVING_FROM_DATABASE_FAILED, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -108,7 +110,7 @@ public class MatchDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Ошибка получения матчей", e);
+            throw new DaoException(ErrorInfo.RETRIEVING_FROM_DATABASE_FAILED, e);
         } finally {
             if (session != null) {
                 session.close();
@@ -136,7 +138,7 @@ public class MatchDao {
             if (transaction != null) {
                 transaction.rollback();
             }
-            throw new RuntimeException("Ошибка получения матчей по фильтру", e);
+            throw new DaoException(ErrorInfo.RETRIEVING_FROM_DATABASE_FAILED, e);
         } finally {
             if (session != null) {
                 session.close();

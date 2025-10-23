@@ -8,6 +8,8 @@ import static jakarta.servlet.http.HttpServletResponse.SC_INTERNAL_SERVER_ERROR;
 @Getter
 public enum ErrorInfo {
     DATABASE_CONNECTION_ERROR("Database connection error", SC_INTERNAL_SERVER_ERROR),
+    RETRIEVING_FROM_DATABASE_FAILED("Failed to retrieve data from the database", SC_INTERNAL_SERVER_ERROR),
+    SAVING_TO_DATABASE_FAILED("Failed to save data to the database", SC_INTERNAL_SERVER_ERROR),
     NAME_ERROR("The name must be 2 - 20 English letters"),
 
 

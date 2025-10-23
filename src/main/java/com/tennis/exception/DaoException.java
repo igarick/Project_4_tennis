@@ -1,4 +1,11 @@
 package com.tennis.exception;
 
-public class DaoException {
+public class DaoException extends AppException {
+    public DaoException(ErrorInfo errorInfo, Throwable cause) {
+        super(errorInfo, cause);
+    }
+
+    public DaoException(ErrorInfo errorInfo) {
+        super(errorInfo);
+    }
 }

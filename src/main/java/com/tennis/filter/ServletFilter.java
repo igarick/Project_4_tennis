@@ -1,6 +1,7 @@
 package com.tennis.filter;
 
 import com.tennis.exception.ConnectionException;
+import com.tennis.exception.DaoException;
 import com.tennis.exception.MatchesParamFilterException;
 import com.tennis.util.JspHelper;
 import jakarta.servlet.*;
@@ -30,7 +31,7 @@ public class ServletFilter implements Filter {
             throw e;
         } catch (MatchesParamFilterException ex) {
             httpServletResponse.sendRedirect(MATCHES_JSP);
-        } catch (ConnectionException e) {
+        } catch (ConnectionException | DaoException e) {
             httpServletRequest.setAttribute("errorCode", e.getErrorInfo().getStatusCode());
             httpServletRequest.setAttribute("errorMessage", e.getErrorInfo().getMessage());
             httpServletRequest.getRequestDispatcher("error.jsp").forward(httpServletRequest, httpServletResponse);
