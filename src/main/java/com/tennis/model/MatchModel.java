@@ -12,9 +12,9 @@ import lombok.NoArgsConstructor;
 @Builder
 public class MatchModel {
     private Integer ID;
-    private Player player1;
-    private Player player2;
-    private Player winner;
+    private PlayerModel player1;
+    private PlayerModel player2;
+    private PlayerModel winner;
     private boolean isTieBreak;
     private boolean isFinished;
 }

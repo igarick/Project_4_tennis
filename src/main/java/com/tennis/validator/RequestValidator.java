@@ -11,7 +11,7 @@ public class RequestValidator {
     public static final String NAME_ERROR = "The name must be 2 - 20 English letters";
     private static final String NAME_PATTERN = "[a-zA-Z ]{2,20}";
 
-    public static Optional<String> validateParam(String firstName, String secondName) {
+    public static Optional<String> validateParamAndGetErrorMessage(String firstName, String secondName) {
         if (isEmpty(firstName, secondName)) {
             return Optional.of(EMPTY_FIELD_ERROR);
         }
@@ -28,7 +28,7 @@ public class RequestValidator {
 
     private static boolean isEmpty(String firstName, String secondName) {
         return ((firstName == null || secondName == null)
-        || (firstName.isBlank() || secondName.isBlank()));
+                || (firstName.isBlank() || secondName.isBlank()));
     }
 
     public static boolean isValidFormat(String name) {

@@ -2,6 +2,7 @@ package com.tennis.service.victory;
 
 import com.tennis.model.MatchScoreModel;
 import com.tennis.entity.Player;
+import com.tennis.model.PlayerModel;
 
 public class SetsVictoryAndWinner {
     private static final int AMOUNT_SETS_TO_WIN = 2;
@@ -10,12 +11,12 @@ public class SetsVictoryAndWinner {
         return (playerSetScore == AMOUNT_SETS_TO_WIN && (playerSetScore > opponentSetScore));
     }
 
-    public Player determineWinner(MatchScoreModel match) {
-        Player player1 = match.getMatchModel().getPlayer1();
+    public PlayerModel determineWinner(MatchScoreModel match) {
+        PlayerModel player1 = match.getMatchModel().getPlayer1();
         int firstPlayerSetScore = match.getFirstPlayerScore().getSets();
-        Player player2 = match.getMatchModel().getPlayer2();
+        PlayerModel player2 = match.getMatchModel().getPlayer2();
 
-        Player winner;
+        PlayerModel winner;
         if (firstPlayerSetScore == AMOUNT_SETS_TO_WIN) {
             winner = player1;
         } else {

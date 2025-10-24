@@ -3,6 +3,7 @@ package com.tennis.controller;
 import com.tennis.model.MatchScoreModel;
 import com.tennis.service.MatchScoreCalculationService;
 import com.tennis.service.OngoingMatchesService;
+import com.tennis.service.point.PointIncrementRule;
 import com.tennis.util.JspHelper;
 import com.tennis.util.RequestAttributeSetter;
 import jakarta.servlet.ServletException;
@@ -20,7 +21,10 @@ public class MatchScoreController extends HttpServlet {
     private static final String MATCH_FINISHED_JSP = "match-finished";
 
     private static final OngoingMatchesService ongoingMatchesService = new OngoingMatchesService();
-    private static final MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService();
+
+    private static final MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService(
+            new PointIncrementRule()
+    );
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -45,13 +49,7 @@ public class MatchScoreController extends HttpServlet {
         String firstPlayerIdParam = req.getParameter("firstPlayerId");
         String secondPlayerIdParam = req.getParameter("secondPlayerId");
 
-        if (firstPlayerIdParam != null) {
-            matchScoreCalculationService.calculate(firstPlayerIdParam, currentMatch);
-        }
-
-        if (secondPlayerIdParam != null) {
-            matchScoreCalculationService.calculate(secondPlayerIdParam, currentMatch);
-        }
+        matchScoreCalculationService.updateCurrentPlayerScore(firstPlayerIdParam, secondPlayerIdParam, currentMatch);
 
         boolean isTieBreak = currentMatch.getMatchModel().isTieBreak();
         if (isTieBreak) {

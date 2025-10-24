@@ -1,19 +1,28 @@
 package com.tennis.service;
 
 import com.tennis.dao.PlayerDao;
-import com.tennis.dto.PlayerDto;
 import com.tennis.entity.Player;
+import com.tennis.model.PlayerModel;
 
 import java.util.List;
 
 public class NewMatchService {
     private static final PlayerDao playerDao = new PlayerDao();
 
-    public Player get(PlayerDto dto) {
-        List<Player> players = playerDao.findByName(dto.name());
+    public PlayerModel get(PlayerModel model) {
+        List<Player> players = playerDao.findByName(model.getName());
         if (players.isEmpty()) {
-            return playerDao.save(dto.name());
+            Player player = playerDao.save(model.getName());
+            return buildModel(player);
         }
-        return players.getFirst();
+        Player player = players.getFirst();
+        return buildModel(player);
+    }
+
+    private PlayerModel buildModel(Player player) {
+        return new PlayerModel(
+                player.getId(),
+                player.getName()
+        );
     }
 }

@@ -1,12 +1,10 @@
 package com.tennis.controller;
 
-import com.tennis.dto.PlayerDto;
 import com.tennis.model.*;
 import com.tennis.service.NewMatchService;
 import com.tennis.service.OngoingMatchesService;
 import com.tennis.util.JspHelper;
 import com.tennis.validator.RequestValidator;
-import com.tennis.entity.Player;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -35,18 +33,18 @@ public class NewMatchController extends HttpServlet {
         String parameter1 = req.getParameter("playerOne");
         String parameter2 = req.getParameter("playerTwo");
 
-        Optional<String> errorMessage = RequestValidator.validateParam(parameter1, parameter2);
+        Optional<String> errorMessage = RequestValidator.validateParamAndGetErrorMessage(parameter1, parameter2);
         if (errorMessage.isPresent()) {
             req.setAttribute("error", errorMessage.get());
             req.getRequestDispatcher(JspHelper.getPath(NEW_MATCH_JSP)).forward(req, resp);
             return;
         }
 
-        PlayerDto firstDto = new PlayerDto(null, parameter1);
-        PlayerDto secondDto = new PlayerDto(null, parameter2);
+        PlayerModel firstPlayerModel = new PlayerModel(null, parameter1);
+        PlayerModel secondPlayerModel = new PlayerModel(null, parameter2);
 
-        Player firstPlayer = newMatchService.get(firstDto);
-        Player secondPlayer = newMatchService.get(secondDto);
+        PlayerModel firstPlayer = newMatchService.get(firstPlayerModel);
+        PlayerModel secondPlayer = newMatchService.get(secondPlayerModel);
 
         UUID uuid = UUID.randomUUID();
 

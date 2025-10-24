@@ -19,40 +19,11 @@ public class SessionManager {
                     .configure(CONFIG_FILE)
                     .buildSessionFactory();
         } catch (Throwable e) {
-//            request.setAttribute("errorCode", 500);
-//            request.setAttribute("errorMessage", "Ошибка подключения к базе данных");
-//            request.getRequestDispatcher("error.jsp").forward(request, response);
             throw new ConnectionException(ErrorInfo.DATABASE_CONNECTION_ERROR, e);
         }
     }
-//
-//    public static void shutdown() {
-//        if (sessionFactory != null) {
-//            sessionFactory.close();
-//        }
-//    }
 
     public static SessionFactory getSessionFactory() {
         return sessionFactory;
     }
-
-    //    @Getter
-//    private static final SessionFactory factory = buildFactory();
-//
-//    private static SessionFactory buildFactory() {
-//        try {
-//            return new Configuration().configure(PROPERTY_NAME)
-//                    .buildSessionFactory();
-//        } catch (HibernateException e) {
-//
-////            request.setAttribute("errorCode", 500);
-////            request.setAttribute("errorMessage", "Ошибка подключения к базе данных");
-////            request.getRequestDispatcher("error.jsp").forward(request, response);
-//
-//
-//            throw new RuntimeException(e);
-//            // to do
-//        }
-//    }
-
 }

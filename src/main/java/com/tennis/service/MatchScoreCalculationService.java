@@ -9,33 +9,36 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class MatchScoreCalculationService {
-    private static final PointIncrementRule pointIncrementRule = new PointIncrementRule();
+    //    private static final PointIncrementRule pointIncrementRule = new PointIncrementRule();
+
+    private final PointIncrementRule pointIncrementRule; // = new PointIncrementRule();
     private static final TieBreak tieBreak = new TieBreak();
     private static final PointsVictoryAndAdvantage pointsVictoryAndAdvantage = new PointsVictoryAndAdvantage();
     private static final GamesVictory gamesVictory = new GamesVictory();
     private static final SetsVictoryAndWinner setsVictoryAndWinner = new SetsVictoryAndWinner();
     private static final FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
 
+//    MatchScoreCalculationService service = new MatchScoreCalculationService(pointIncrementRule);
 
-    public void calculate(String playerIdParam, MatchScoreModel currentMatch) {
-        Integer playerId = Integer.parseInt(playerIdParam);
+    public MatchScoreCalculationService(PointIncrementRule pointIncrementRule) {
+        this.pointIncrementRule = pointIncrementRule;
+    }
+
+    public void updateCurrentPlayerScore(String firstPlayerIdParam, String secondPlayerIdParam, MatchScoreModel currentMatch) {
+        Integer playerId = getPlayerId(firstPlayerIdParam, secondPlayerIdParam);
 
         Integer firstPlayerId = currentMatch.getMatchModel().getPlayer1().getId();
-        Integer secondPlayerId = currentMatch.getMatchModel().getPlayer2().getId();
 
+        Score player;
+        Score opponent;
         if (playerId.equals(firstPlayerId)) {
-            Score player = currentMatch.getFirstPlayerScore();
-            Score opponent = currentMatch.getSecondPlayerScore();
-
-            updateScoreState(player, opponent, currentMatch);
+            player = currentMatch.getFirstPlayerScore();
+            opponent = currentMatch.getSecondPlayerScore();
+        } else {
+            player = currentMatch.getSecondPlayerScore();
+            opponent = currentMatch.getFirstPlayerScore();
         }
-
-        if (playerId.equals(secondPlayerId)) {
-            Score player = currentMatch.getSecondPlayerScore();
-            Score opponent = currentMatch.getFirstPlayerScore();
-
-            updateScoreState(player, opponent, currentMatch);
-        }
+        updateScoreState(player, opponent, currentMatch);
     }
 
     private void updateScoreState(Score playerScore, Score opponentScore, MatchScoreModel currentMatch) {
@@ -53,18 +56,35 @@ public class MatchScoreCalculationService {
         if (victory) {
             currentMatch.getMatchModel().setFinished(true);
 
-            Player player = setsVictoryAndWinner.determineWinner(currentMatch);
+            PlayerModel player = setsVictoryAndWinner.determineWinner(currentMatch);
             currentMatch.getMatchModel().setWinner(player);
 
             Match match = new Match(
                     null,
-                    currentMatch.getMatchModel().getPlayer1(),
-                    currentMatch.getMatchModel().getPlayer2(),
-                    currentMatch.getMatchModel().getWinner()
+                    new Player(
+                            currentMatch.getMatchModel().getPlayer1().getId(),
+                            currentMatch.getMatchModel().getPlayer1().getName()
+                    ),
+                    new Player(
+                            currentMatch.getMatchModel().getPlayer2().getId(),
+                            currentMatch.getMatchModel().getPlayer2().getName()
+                    ),
+                    new Player(
+                            currentMatch.getMatchModel().getWinner().getId(),
+                            currentMatch.getMatchModel().getWinner().getName()
+                    )
             );
-
             finishedMatchesPersistenceService.save(match);
-
         }
+    }
+
+    private Integer getPlayerId(String firstPlayerIdParam, String secondPlayerIdParam) {
+        int playerId;
+        if (firstPlayerIdParam != null) {
+            playerId = Integer.parseInt(firstPlayerIdParam);
+        } else {
+            playerId = Integer.parseInt(secondPlayerIdParam);
+        }
+        return playerId;
     }
 }
