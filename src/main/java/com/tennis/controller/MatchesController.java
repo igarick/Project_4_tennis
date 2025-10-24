@@ -1,8 +1,6 @@
 package com.tennis.controller;
 
 import com.tennis.dto.MatchesPaginationDto;
-import com.tennis.dto.PageDto;
-import com.tennis.dto.PlayerNameDto;
 import com.tennis.dto.RequestMatchParamsDto;
 import com.tennis.service.MatchService;
 import com.tennis.util.JspHelper;
@@ -20,6 +18,8 @@ import java.nio.charset.StandardCharsets;
 @WebServlet("/matches")
 public class MatchesController extends HttpServlet {
     private static final String MATCHES_JSP = "matches";
+    private static final String PATH_TO_FIRST_PAGE = "matches?page=1";
+    private static final String PATH_TO_FIRST_PAGE_WITH_FILTER = "matches?page=1&filter_by_player_name=";
 
     private static final MatchService matchService = new MatchService();
 
@@ -30,11 +30,11 @@ public class MatchesController extends HttpServlet {
 
         if (paramPage == null) {
             if (paramFilter == null || paramFilter.isBlank()) {
-                resp.sendRedirect("matches?page=1");
+                resp.sendRedirect(PATH_TO_FIRST_PAGE);
 
             } else {
                 MatchParamFilterValidator.validate(paramFilter);
-                resp.sendRedirect("matches?page=1&filter_by_player_name="
+                resp.sendRedirect(PATH_TO_FIRST_PAGE_WITH_FILTER
                                   + URLEncoder.encode(paramFilter, StandardCharsets.UTF_8));
             }
             return;
@@ -43,7 +43,7 @@ public class MatchesController extends HttpServlet {
                 paramPage,
                 paramFilter);
 
-        MatchesPaginationDto dto = matchService.determineParamPaginationForMatches(paramsDto);
+        MatchesPaginationDto dto = matchService.getPaginatedMatches(paramsDto);
 
         req.setAttribute("paramFilter", paramFilter);
         req.setAttribute("totalPages", dto.totalPages());

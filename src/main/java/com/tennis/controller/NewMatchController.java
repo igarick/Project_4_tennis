@@ -20,7 +20,8 @@ import java.util.UUID;
 @WebServlet("/new-match")
 public class NewMatchController extends HttpServlet {
     private static final String NEW_MATCH_JSP = "new-match";
-//    private static final String ERROR_PAGE = "error.jsp";
+    private static final String MATCH_SCORE_PATH = "match-score?uuid=";
+
     private static final NewMatchService newMatchService = new NewMatchService();
     private static final OngoingMatchesService ongoingMatchesService = new OngoingMatchesService();
 
@@ -67,10 +68,9 @@ public class NewMatchController extends HttpServlet {
                         PointScoreEnum.LOVE,
                         0)
         );
-
         ongoingMatchesService.writeCurrentMatch(uuid, matchScoreModel);
 
-        resp.sendRedirect("match-score?uuid=" + uuid);
+        resp.sendRedirect(MATCH_SCORE_PATH + uuid);
     }
 }
 

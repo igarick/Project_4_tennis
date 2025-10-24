@@ -51,7 +51,7 @@
             </a>
         </div>
         <div class="button-link">
-            <a href="WEB-INF/jsp/error.jsp">
+            <a href="error">
                 <button>View match results</button>
             </a>
         </div>

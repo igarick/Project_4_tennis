@@ -11,7 +11,7 @@ public class PaginationService {
     }
 
     public Long countPlayersByName(PlayerNameDto dto) {
-        return matchDao.countPlayersByName(dto.name());
+        return matchDao.countMatchesByPlayerName(dto.name());
     }
 
 }

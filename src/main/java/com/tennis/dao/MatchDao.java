@@ -118,7 +118,7 @@ public class MatchDao {
         }
     }
 
-    public Long countPlayersByName(String name) {
+    public Long countMatchesByPlayerName(String name) {
         Session session = null;
         Transaction transaction = null;
 

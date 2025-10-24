@@ -16,8 +16,4 @@ public class NewMatchService {
         }
         return players.getFirst();
     }
-//
-//    public Player save(PlayerDto dto) {
-//        return newMatchDao.save(dto.name());
-//    }
 }

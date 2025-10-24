@@ -11,29 +11,29 @@ public class MatchService {
     private static final FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
     private static final MatchDao matchDao = new MatchDao();
 
-    public MatchesPaginationDto determineParamPaginationForMatches(RequestMatchParamsDto paramsDto) {
-        long l = Long.parseLong(paramsDto.page());
-        int currentPage = Math.toIntExact(l);
+    public MatchesPaginationDto getPaginatedMatches(RequestMatchParamsDto paramsDto) {
+        long parsedPage = Long.parseLong(paramsDto.page());
+        int currentPage = Math.toIntExact(parsedPage);
         String name = paramsDto.name();
 
         int offset = (LIMIT * (currentPage - 1));
 
-        long amount = 0;
-        List<MatchDto> matches = List.of();
+        long amountMatches;
+        List<MatchDto> matches;
 
         if (name == null || name.isBlank()) {
             matches = finishedMatchesPersistenceService.findAll(offset, LIMIT);
-            amount = matchDao.countMatches();
+            amountMatches = matchDao.countMatches();
         } else {
             matches = finishedMatchesPersistenceService.findByName(name, offset, LIMIT);
-            amount = matchDao.countPlayersByName(name);
+            amountMatches = matchDao.countMatchesByPlayerName(name);
         }
-        int totalPages = (int) Math.ceil((double) amount / LIMIT);
+        int totalPages = (int) Math.ceil((double) amountMatches / LIMIT);
 
         return new MatchesPaginationDto(
                 totalPages,
                 currentPage,
-                amount,
+                amountMatches,
                 matches
         );
     }
