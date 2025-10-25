@@ -14,7 +14,7 @@ import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class MatchScoreCalculationService {
-    //    private static final PointIncrementRule pointIncrementRule = new PointIncrementRule();
+    //   private static final PointIncrementRule pointIncrementRule = new PointIncrementRule();
 
     private final PointIncrementRule pointIncrementRule; // = new PointIncrementRule();
     private static final TieBreak tieBreak = new TieBreak();
