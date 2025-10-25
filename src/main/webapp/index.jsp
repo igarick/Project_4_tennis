@@ -51,7 +51,7 @@
             </a>
         </div>
         <div class="button-link">
-            <a href="error">
+            <a href="matches">
                 <button>View match results</button>
             </a>
         </div>

@@ -1,10 +1,15 @@
 package com.tennis.service;
 
-import com.tennis.model.*;
-import com.tennis.service.point.PointIncrementRule;
-import com.tennis.service.victory.*;
 import com.tennis.entity.Match;
 import com.tennis.entity.Player;
+import com.tennis.model.MatchScoreModel;
+import com.tennis.model.PlayerModel;
+import com.tennis.model.Score;
+import com.tennis.service.point.PointIncrementRule;
+import com.tennis.service.victory.GamesVictory;
+import com.tennis.service.victory.PointsVictoryAndAdvantage;
+import com.tennis.service.victory.SetsVictoryAndWinner;
+import com.tennis.service.victory.TieBreak;
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -24,24 +29,7 @@ public class MatchScoreCalculationService {
         this.pointIncrementRule = pointIncrementRule;
     }
 
-    public void updateCurrentPlayerScore(String firstPlayerIdParam, String secondPlayerIdParam, MatchScoreModel currentMatch) {
-        Integer playerId = getPlayerId(firstPlayerIdParam, secondPlayerIdParam);
-
-        Integer firstPlayerId = currentMatch.getMatchModel().getPlayer1().getId();
-
-        Score player;
-        Score opponent;
-        if (playerId.equals(firstPlayerId)) {
-            player = currentMatch.getFirstPlayerScore();
-            opponent = currentMatch.getSecondPlayerScore();
-        } else {
-            player = currentMatch.getSecondPlayerScore();
-            opponent = currentMatch.getFirstPlayerScore();
-        }
-        updateScoreState(player, opponent, currentMatch);
-    }
-
-    private void updateScoreState(Score playerScore, Score opponentScore, MatchScoreModel currentMatch) {
+    public void updateScoreState(Score playerScore, Score opponentScore, MatchScoreModel currentMatch) {
         pointIncrementRule.incrementPlayerPoint(playerScore, opponentScore, currentMatch);
 
         if (currentMatch.getMatchModel().isTieBreak()) {
@@ -59,32 +47,27 @@ public class MatchScoreCalculationService {
             PlayerModel player = setsVictoryAndWinner.determineWinner(currentMatch);
             currentMatch.getMatchModel().setWinner(player);
 
-            Match match = new Match(
-                    null,
-                    new Player(
-                            currentMatch.getMatchModel().getPlayer1().getId(),
-                            currentMatch.getMatchModel().getPlayer1().getName()
-                    ),
-                    new Player(
-                            currentMatch.getMatchModel().getPlayer2().getId(),
-                            currentMatch.getMatchModel().getPlayer2().getName()
-                    ),
-                    new Player(
-                            currentMatch.getMatchModel().getWinner().getId(),
-                            currentMatch.getMatchModel().getWinner().getName()
-                    )
-            );
+            Match match = buildMatch(currentMatch);
+
             finishedMatchesPersistenceService.save(match);
         }
     }
 
-    private Integer getPlayerId(String firstPlayerIdParam, String secondPlayerIdParam) {
-        int playerId;
-        if (firstPlayerIdParam != null) {
-            playerId = Integer.parseInt(firstPlayerIdParam);
-        } else {
-            playerId = Integer.parseInt(secondPlayerIdParam);
-        }
-        return playerId;
+    private Match buildMatch(MatchScoreModel currentMatch) {
+        return new Match(
+                null,
+                new Player(
+                        currentMatch.getMatchModel().getPlayer1().getId(),
+                        currentMatch.getMatchModel().getPlayer1().getName()
+                ),
+                new Player(
+                        currentMatch.getMatchModel().getPlayer2().getId(),
+                        currentMatch.getMatchModel().getPlayer2().getName()
+                ),
+                new Player(
+                        currentMatch.getMatchModel().getWinner().getId(),
+                        currentMatch.getMatchModel().getWinner().getName()
+                )
+        );
     }
 }

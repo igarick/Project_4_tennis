@@ -2,6 +2,7 @@ package com.tennis.controller;
 
 import com.tennis.model.MatchScoreModel;
 import com.tennis.service.MatchScoreCalculationService;
+import com.tennis.service.MatchScoreService;
 import com.tennis.service.OngoingMatchesService;
 import com.tennis.service.point.PointIncrementRule;
 import com.tennis.util.JspHelper;
@@ -22,9 +23,15 @@ public class MatchScoreController extends HttpServlet {
 
     private static final OngoingMatchesService ongoingMatchesService = new OngoingMatchesService();
 
-    private static final MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService(
-            new PointIncrementRule()
+    private static final MatchScoreService matchScoreService = new MatchScoreService(
+            new MatchScoreCalculationService(
+                    new PointIncrementRule()
+            )
     );
+
+//    private static final MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService(
+//            new PointIncrementRule()
+//    );
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -49,7 +56,7 @@ public class MatchScoreController extends HttpServlet {
         String firstPlayerIdParam = req.getParameter("firstPlayerId");
         String secondPlayerIdParam = req.getParameter("secondPlayerId");
 
-        matchScoreCalculationService.updateCurrentPlayerScore(firstPlayerIdParam, secondPlayerIdParam, currentMatch);
+        matchScoreService.updateCurrentPlayerScore(firstPlayerIdParam, secondPlayerIdParam, currentMatch);
 
         boolean isTieBreak = currentMatch.getMatchModel().isTieBreak();
         if (isTieBreak) {

@@ -36,17 +36,5 @@ public class ServletFilter implements Filter {
             httpServletRequest.setAttribute("errorMessage", e.getErrorInfo().getMessage());
             httpServletRequest.getRequestDispatcher("error.jsp").forward(httpServletRequest, httpServletResponse);
         }
-
-//        catch (AppException e) {
-//            log.error("Request failed: {}", e.getErrorInfo().getMessage(), e);
-//            try {
-//                servletRequest.setAttribute("errorCode", 500);
-//                servletRequest.setAttribute("errorMessage", "Ошибка подключения к базе данных");
-//                servletRequest.getRequestDispatcher("error.jsp").forward(servletRequest, servletResponse);
-//            } catch (ServletException | IOException ex) {
-//                log.error("Unexpected error", ex);
-//                throw ex;
-//            }
-//        }
     }
 }
