@@ -16,7 +16,8 @@ import java.io.IOException;
 @WebFilter("/*")
 public class ServletFilter implements Filter {
     private static final Logger log = LoggerFactory.getLogger(ServletFilter.class);
-    private static final String MATCHES_JSP = "matches";
+    private static final String DISPLAY_MATCHES = "matches";
+    private static final String DISPLAY_ERROR = "error";
 
 
     @Override
@@ -30,11 +31,11 @@ public class ServletFilter implements Filter {
             log.warn("Impossible to perform this operation", e);
             throw e;
         } catch (MatchesParamFilterException ex) {
-            httpServletResponse.sendRedirect(MATCHES_JSP);
+            httpServletResponse.sendRedirect(DISPLAY_MATCHES);
         } catch (ConnectionException | DaoException e) {
             httpServletRequest.setAttribute("errorCode", e.getErrorInfo().getStatusCode());
             httpServletRequest.setAttribute("errorMessage", e.getErrorInfo().getMessage());
-            httpServletRequest.getRequestDispatcher("error.jsp").forward(httpServletRequest, httpServletResponse);
+            httpServletRequest.getRequestDispatcher(JspHelper.getPath(DISPLAY_ERROR)).forward(httpServletRequest, httpServletResponse);
         }
     }
 }

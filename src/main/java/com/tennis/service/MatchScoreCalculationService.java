@@ -10,12 +10,9 @@ import com.tennis.service.victory.GamesVictory;
 import com.tennis.service.victory.PointsVictoryAndAdvantage;
 import com.tennis.service.victory.SetsVictoryAndWinner;
 import com.tennis.service.victory.TieBreak;
-import lombok.extern.slf4j.Slf4j;
+import com.tennis.util.EntitiesMapperAndBuilder;
 
-@Slf4j
 public class MatchScoreCalculationService {
-    //   private static final PointIncrementRule pointIncrementRule = new PointIncrementRule();
-
     private final PointIncrementRule pointIncrementRule; // = new PointIncrementRule();
     private static final TieBreak tieBreak = new TieBreak();
     private static final PointsVictoryAndAdvantage pointsVictoryAndAdvantage = new PointsVictoryAndAdvantage();
@@ -47,27 +44,9 @@ public class MatchScoreCalculationService {
             PlayerModel player = setsVictoryAndWinner.determineWinner(currentMatch);
             currentMatch.getMatchModel().setWinner(player);
 
-            Match match = buildMatch(currentMatch);
+            Match match = EntitiesMapperAndBuilder.buildMatch(currentMatch);
 
             finishedMatchesPersistenceService.save(match);
         }
-    }
-
-    private Match buildMatch(MatchScoreModel currentMatch) {
-        return new Match(
-                null,
-                new Player(
-                        currentMatch.getMatchModel().getPlayer1().getId(),
-                        currentMatch.getMatchModel().getPlayer1().getName()
-                ),
-                new Player(
-                        currentMatch.getMatchModel().getPlayer2().getId(),
-                        currentMatch.getMatchModel().getPlayer2().getName()
-                ),
-                new Player(
-                        currentMatch.getMatchModel().getWinner().getId(),
-                        currentMatch.getMatchModel().getWinner().getName()
-                )
-        );
     }
 }

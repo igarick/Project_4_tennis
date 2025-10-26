@@ -87,15 +87,10 @@
 
     <div class="input-container">
         <form method="get" action="matches">
-            <c:if test="${not empty error}">
-                <p class="error">"${error}"</p>
-            </c:if>
+            <%--            <c:if test="${not empty error}">--%>
+            <%--                <p class="error">"${error}"</p>--%>
+            <%--            </c:if>--%>
 
-<%--            <% String error = (String) request.getAttribute("error"); %>--%>
-<%--            <% if (error != null) { %>--%>
-<%--            <p class="error"><%= error %>--%>
-<%--            </p>--%>
-<%--            <% } %>--%>
             <input class="input-filter" placeholder="Filter by name" type="text"
                    name="filter_by_player_name" value="${paramFilter}"/>
             <button type="submit" class="btn-filter">Apply</button>
@@ -105,11 +100,6 @@
                 </a>
             </div>
         </form>
-        <%--    <form method="get" action="match-finished">--%>
-        <%--      <input class="input-filter" type="text" name="filter" placeholder="Filter by name" value="${param.filter}" />--%>
-        <%--      <button type="submit" class="btn-filter">Apply</button>--%>
-        <%--      <a href="match-finished"><button type="button" class="btn-filter">Reset</button></a>--%>
-        <%--    </form>--%>
     </div>
 
     <table>
@@ -128,7 +118,6 @@
                 <td><span class="winner-name-td">${match.winner.name}</span></td>
             </tr>
         </c:forEach>
-        <%-- Здесь ты можешь использовать обычный for или request.getAttribute("finishedMatches") --%>
         </tbody>
     </table>
 
@@ -153,22 +142,20 @@
                     <a class="prev" href="matches?page=${currentPage - 1}">&lt;</a>
                 </c:otherwise>
             </c:choose>
-            <%--          <a class="prev" href="matches?page=${currentPage - 1}&filter_by_player_name=${paramFilter}">&lt;</a>--%>
         </c:if>
-
 
         <c:forEach var="i" begin="${startPage}" end="${endPage}">
             <c:choose>
                 <c:when test="${i == currentPage}">
                     <c:choose>
                         <c:when test="${not empty paramFilter}">
-                            <a class="num-page current" href="matches?page=${i}&filter_by_player_name=${paramFilter}">${i}</a>
+                            <a class="num-page current"
+                               href="matches?page=${i}&filter_by_player_name=${paramFilter}">${i}</a>
                         </c:when>
                         <c:otherwise>
                             <a class="num-page current" href="matches?page=${i}">${i}</a>
                         </c:otherwise>
                     </c:choose>
-                    <%--                    <a class="num-page current" href="matches?page=${i}&filter_by_player_name=${paramFilter}">${i}</a>--%>
                 </c:when>
                 <c:otherwise>
                     <c:choose>
@@ -179,7 +166,6 @@
                             <a class="num-page" href="matches?page=${i}">${i}</a>
                         </c:otherwise>
                     </c:choose>
-                    <%--                    <a class="num-page" href="matches?page=${i}&filter_by_player_name=${paramFilter}">${i}</a>--%>
                 </c:otherwise>
             </c:choose>
         </c:forEach>
@@ -193,14 +179,7 @@
                     <a class="next" href="matches?page=${currentPage + 1}">&gt;</a>
                 </c:otherwise>
             </c:choose>
-            <%--            <a class="next" href="matches?page=${currentPage + 1}&filter_by_player_name=${paramFilter}">&gt;</a>--%>
         </c:if>
-
-        <%--    <a href="match-finished?page=${currentPage - 1}&filter=${param.filter}">&lt;</a>--%>
-        <%--    <a href="match-finished?page=1&filter=${param.filter}" class="${currentPage == 1 ? 'current' : ''}">1</a>--%>
-        <%--    <a href="match-finished?page=2&filter=${param.filter}" class="${currentPage == 2 ? 'current' : ''}">2</a>--%>
-        <%--    <a href="match-finished?page=3&filter=${param.filter}" class="${currentPage == 3 ? 'current' : ''}">3</a>--%>
-        <%--    <a href="match-finished?page=${currentPage + 1}&filter=${param.filter}">&gt;</a>--%>
     </div>
 </div>
 

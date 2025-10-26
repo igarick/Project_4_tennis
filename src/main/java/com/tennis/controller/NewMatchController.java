@@ -3,6 +3,7 @@ package com.tennis.controller;
 import com.tennis.model.*;
 import com.tennis.service.NewMatchService;
 import com.tennis.service.OngoingMatchesService;
+import com.tennis.util.EntitiesMapperAndBuilder;
 import com.tennis.util.JspHelper;
 import com.tennis.validator.RequestValidator;
 import jakarta.servlet.ServletException;
@@ -48,24 +49,8 @@ public class NewMatchController extends HttpServlet {
 
         UUID uuid = UUID.randomUUID();
 
-        MatchScoreModel matchScoreModel = new MatchScoreModel(
-                new MatchModel(
-                        null,
-                        firstPlayer,
-                        secondPlayer,
-                        null,
-                        false,
-                        false
-                ),
-                new Score(0,
-                        0,
-                        PointScoreEnum.LOVE,
-                        0),
-                new Score(0,
-                        0,
-                        PointScoreEnum.LOVE,
-                        0)
-        );
+        MatchScoreModel matchScoreModel = EntitiesMapperAndBuilder.buildInitialMatchScore(firstPlayer, secondPlayer);
+
         ongoingMatchesService.writeCurrentMatch(uuid, matchScoreModel);
 
         resp.sendRedirect(MATCH_SCORE_PATH + uuid);
