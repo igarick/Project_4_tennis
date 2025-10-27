@@ -4,6 +4,7 @@ import com.tennis.dto.MatchesPaginationDto;
 import com.tennis.dto.RequestMatchParamsDto;
 import com.tennis.service.MatchService;
 import com.tennis.util.JspHelper;
+import com.tennis.util.setter.RequestPaginationSetter;
 import com.tennis.validator.MatchParamFilterValidator;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
@@ -21,7 +22,12 @@ public class MatchesController extends HttpServlet {
     private static final String PATH_TO_FIRST_PAGE = "matches?page=1";
     private static final String PATH_TO_FIRST_PAGE_WITH_FILTER = "matches?page=1&filter_by_player_name=";
 
-    private static final MatchService matchService = new MatchService();
+    private MatchService matchService;
+
+    @Override
+    public void init() {
+        this.matchService = (MatchService) getServletContext().getAttribute("matchService");
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -35,7 +41,7 @@ public class MatchesController extends HttpServlet {
             } else {
                 MatchParamFilterValidator.validate(paramFilter);
                 resp.sendRedirect(PATH_TO_FIRST_PAGE_WITH_FILTER
-                                  + URLEncoder.encode(paramFilter, StandardCharsets.UTF_8));
+                                  + URLEncoder.encode(paramFilter.toUpperCase(), StandardCharsets.UTF_8));
             }
             return;
         }
@@ -43,12 +49,14 @@ public class MatchesController extends HttpServlet {
                 paramPage,
                 paramFilter);
 
-        MatchesPaginationDto dto = matchService.getPaginatedMatches(paramsDto);
+        MatchesPaginationDto paginationDto = matchService.getPaginatedMatches(paramsDto);
 
-        req.setAttribute("paramFilter", paramFilter);
-        req.setAttribute("totalPages", dto.totalPages());
-        req.setAttribute("currentPage", dto.currentPage());
-        req.setAttribute("matches", dto.matchesDto());
+        RequestPaginationSetter.SetAttributes(req, paramFilter, paginationDto);
+
+//        req.setAttribute("paramFilter", paramFilter);
+//        req.setAttribute("totalPages", paginationDto.totalPages());
+//        req.setAttribute("currentPage", paginationDto.currentPage());
+//        req.setAttribute("matches", paginationDto.matchesDto());
         req.getRequestDispatcher(JspHelper.getPath(MATCHES_JSP)).forward(req, resp);
     }
 }

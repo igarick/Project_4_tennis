@@ -1,4 +1,4 @@
-package com.tennis.util;
+package com.tennis.util.setter;
 
 import com.tennis.model.MatchScoreModel;
 import jakarta.servlet.http.HttpServletRequest;

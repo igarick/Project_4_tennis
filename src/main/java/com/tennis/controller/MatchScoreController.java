@@ -1,12 +1,10 @@
 package com.tennis.controller;
 
 import com.tennis.model.MatchScoreModel;
-import com.tennis.service.MatchScoreCalculationService;
 import com.tennis.service.MatchScoreService;
 import com.tennis.service.OngoingMatchesService;
-import com.tennis.service.point.PointIncrementRule;
 import com.tennis.util.JspHelper;
-import com.tennis.util.RequestAttributeSetter;
+import com.tennis.util.setter.RequestAttributeSetter;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
@@ -21,17 +19,16 @@ public class MatchScoreController extends HttpServlet {
     private static final String MATCH_SCORE_JSP = "match-score";
     private static final String MATCH_FINISHED_JSP = "match-finished";
 
-    private static final OngoingMatchesService ongoingMatchesService = new OngoingMatchesService();
+    private OngoingMatchesService ongoingMatchesService;
+    private MatchScoreService matchScoreService;
 
-    private static final MatchScoreService matchScoreService = new MatchScoreService(
-            new MatchScoreCalculationService(
-                    new PointIncrementRule()
-            )
-    );
-
-//    private static final MatchScoreCalculationService matchScoreCalculationService = new MatchScoreCalculationService(
-//            new PointIncrementRule()
-//    );
+    @Override
+    public void init() {
+        this.ongoingMatchesService = (OngoingMatchesService) getServletContext()
+                .getAttribute("ongoingMatchesService");
+        this.matchScoreService = (MatchScoreService) getServletContext()
+                .getAttribute("matchScoreService");
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -40,9 +37,7 @@ public class MatchScoreController extends HttpServlet {
 
         MatchScoreModel currentMatch = ongoingMatchesService.getCurrentMatch(uuid);
 
-        RequestAttributeSetter.setPlayersAndScore(req, currentMatch);
-        RequestAttributeSetter.setPointScorePlayers(req, currentMatch);
-        RequestAttributeSetter.setUuid(req, uuidParam);
+        setMatchAttributes(req, currentMatch, uuidParam);
         req.getRequestDispatcher(JspHelper.getPath(MATCH_SCORE_JSP)).forward(req, resp);
     }
 
@@ -58,15 +53,7 @@ public class MatchScoreController extends HttpServlet {
 
         matchScoreService.updateCurrentPlayerScore(firstPlayerIdParam, secondPlayerIdParam, currentMatch);
 
-        boolean isTieBreak = currentMatch.getMatchModel().isTieBreak();
-        if (isTieBreak) {
-            RequestAttributeSetter.setTieBreakPointsScorePlayers(req, currentMatch);
-        } else {
-            RequestAttributeSetter.setPointScorePlayers(req, currentMatch);
-        }
-        RequestAttributeSetter.setPlayersAndScore(req, currentMatch);
-        RequestAttributeSetter.setUuid(req, uuidParam);
-
+        setMatchAttributes(req, currentMatch, uuidParam);
         boolean finished = currentMatch.getMatchModel().isFinished();
         if (finished) {
             RequestAttributeSetter.setWinnerName(req, currentMatch);
@@ -77,6 +64,17 @@ public class MatchScoreController extends HttpServlet {
         } else {
             req.getRequestDispatcher(JspHelper.getPath(MATCH_SCORE_JSP)).forward(req, resp);
         }
+    }
+
+    private void setMatchAttributes(HttpServletRequest req, MatchScoreModel currentMatch, String uuidParam) {
+        boolean isTieBreak = currentMatch.getMatchModel().isTieBreak();
+        if (isTieBreak) {
+            RequestAttributeSetter.setTieBreakPointsScorePlayers(req, currentMatch);
+        } else {
+            RequestAttributeSetter.setPointScorePlayers(req, currentMatch);
+        }
+        RequestAttributeSetter.setPlayersAndScore(req, currentMatch);
+        RequestAttributeSetter.setUuid(req, uuidParam);
     }
 }
 

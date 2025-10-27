@@ -21,8 +21,16 @@ public class NewMatchController extends HttpServlet {
     private static final String NEW_MATCH_JSP = "new-match";
     private static final String MATCH_SCORE_PATH = "match-score?uuid=";
 
-    private static final NewMatchService newMatchService = new NewMatchService();
-    private static final OngoingMatchesService ongoingMatchesService = new OngoingMatchesService();
+    private NewMatchService newMatchService;
+    private OngoingMatchesService ongoingMatchesService;
+
+    @Override
+    public void init() {
+        this.newMatchService = (NewMatchService) getServletContext()
+                .getAttribute("newMatchService");
+        this.ongoingMatchesService = (OngoingMatchesService) getServletContext()
+                .getAttribute("ongoingMatchesService");
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -41,8 +49,8 @@ public class NewMatchController extends HttpServlet {
             return;
         }
 
-        PlayerModel firstPlayerModel = new PlayerModel(null, parameter1);
-        PlayerModel secondPlayerModel = new PlayerModel(null, parameter2);
+        PlayerModel firstPlayerModel = new PlayerModel(null, parameter1.toUpperCase());
+        PlayerModel secondPlayerModel = new PlayerModel(null, parameter2.toUpperCase());
 
         PlayerModel firstPlayer = newMatchService.get(firstPlayerModel);
         PlayerModel secondPlayer = newMatchService.get(secondPlayerModel);

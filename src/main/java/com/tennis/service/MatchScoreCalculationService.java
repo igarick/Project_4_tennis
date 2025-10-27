@@ -1,7 +1,6 @@
 package com.tennis.service;
 
 import com.tennis.entity.Match;
-import com.tennis.entity.Player;
 import com.tennis.model.MatchScoreModel;
 import com.tennis.model.PlayerModel;
 import com.tennis.model.Score;
@@ -13,17 +12,26 @@ import com.tennis.service.victory.TieBreak;
 import com.tennis.util.EntitiesMapperAndBuilder;
 
 public class MatchScoreCalculationService {
-    private final PointIncrementRule pointIncrementRule; // = new PointIncrementRule();
-    private static final TieBreak tieBreak = new TieBreak();
-    private static final PointsVictoryAndAdvantage pointsVictoryAndAdvantage = new PointsVictoryAndAdvantage();
-    private static final GamesVictory gamesVictory = new GamesVictory();
-    private static final SetsVictoryAndWinner setsVictoryAndWinner = new SetsVictoryAndWinner();
-    private static final FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
+    private final PointIncrementRule pointIncrementRule;
+    private final TieBreak tieBreak;
+    private final PointsVictoryAndAdvantage pointsVictoryAndAdvantage;
+    private final GamesVictory gamesVictory;
+    private final SetsVictoryAndWinner setsVictoryAndWinner;
+    private final FinishedMatchesPersistenceService finishedMatchesPersistenceService;
 
-//    MatchScoreCalculationService service = new MatchScoreCalculationService(pointIncrementRule);
-
-    public MatchScoreCalculationService(PointIncrementRule pointIncrementRule) {
+    public MatchScoreCalculationService
+            (PointIncrementRule pointIncrementRule,
+             FinishedMatchesPersistenceService finishedMatchesPersistenceService,
+             SetsVictoryAndWinner setsVictoryAndWinner,
+             GamesVictory gamesVictory,
+             PointsVictoryAndAdvantage pointsVictoryAndAdvantage,
+             TieBreak tieBreak) {
         this.pointIncrementRule = pointIncrementRule;
+        this.finishedMatchesPersistenceService = finishedMatchesPersistenceService;
+        this.setsVictoryAndWinner = setsVictoryAndWinner;
+        this.gamesVictory = gamesVictory;
+        this.pointsVictoryAndAdvantage = pointsVictoryAndAdvantage;
+        this.tieBreak = tieBreak;
     }
 
     public void updateScoreState(Score playerScore, Score opponentScore, MatchScoreModel currentMatch) {

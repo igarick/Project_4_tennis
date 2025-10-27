@@ -2,13 +2,16 @@ package com.tennis.service;
 
 import com.tennis.dao.MatchDao;
 import com.tennis.dto.MatchDto;
-import com.tennis.dto.PlayerNameDto;
 import com.tennis.entity.Match;
 
 import java.util.List;
 
 public class FinishedMatchesPersistenceService {
-    private static final MatchDao matchDao = new MatchDao();
+    private final MatchDao matchDao; // = new MatchDao();
+
+    public FinishedMatchesPersistenceService(MatchDao matchDao) {
+        this.matchDao = matchDao;
+    }
 
     public void save(Match match) {
         matchDao.save(match);

@@ -7,7 +7,11 @@ import com.tennis.model.PlayerModel;
 import java.util.List;
 
 public class NewMatchService {
-    private static final PlayerDao playerDao = new PlayerDao();
+    private final PlayerDao playerDao; // = new PlayerDao();
+
+    public NewMatchService(PlayerDao playerDao) {
+        this.playerDao = playerDao;
+    }
 
     public PlayerModel get(PlayerModel model) {
         List<Player> players = playerDao.findByName(model.getName());

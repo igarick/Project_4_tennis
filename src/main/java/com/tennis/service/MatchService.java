@@ -8,8 +8,14 @@ import java.util.List;
 public class MatchService {
     private static final int LIMIT = 3;
 
-    private static final FinishedMatchesPersistenceService finishedMatchesPersistenceService = new FinishedMatchesPersistenceService();
-    private static final MatchDao matchDao = new MatchDao();
+    private final FinishedMatchesPersistenceService finishedMatchesPersistenceService; // = new FinishedMatchesPersistenceService();
+    private final MatchDao matchDao; // = new MatchDao();
+
+    public MatchService(FinishedMatchesPersistenceService finishedMatchesPersistenceService,
+                        MatchDao matchDao) {
+        this.finishedMatchesPersistenceService = finishedMatchesPersistenceService;
+        this.matchDao = matchDao;
+    }
 
     public MatchesPaginationDto getPaginatedMatches(RequestMatchParamsDto paramsDto) {
         long parsedPage = Long.parseLong(paramsDto.page());
