@@ -3,7 +3,6 @@ package com.tennis.model;
 import lombok.Getter;
 import lombok.ToString;
 
-//@Getter
 @Getter
 @ToString
 public enum PointScoreEnum {

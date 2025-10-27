@@ -1,6 +1,7 @@
 package com.tennis.controller;
 
-import com.tennis.model.*;
+import com.tennis.model.MatchScoreModel;
+import com.tennis.model.PlayerModel;
 import com.tennis.service.NewMatchService;
 import com.tennis.service.OngoingMatchesService;
 import com.tennis.util.EntitiesMapperAndBuilder;

@@ -2,12 +2,11 @@ package com.tennis.service;
 
 import com.tennis.entity.Match;
 import com.tennis.model.MatchScoreModel;
-import com.tennis.model.PlayerModel;
 import com.tennis.model.Score;
 import com.tennis.service.point.PointIncrementRule;
 import com.tennis.service.victory.GamesVictory;
 import com.tennis.service.victory.PointsVictoryAndAdvantage;
-import com.tennis.service.victory.SetsVictoryAndWinner;
+import com.tennis.service.victory.SetsVictory;
 import com.tennis.service.victory.TieBreak;
 import com.tennis.util.EntitiesMapperAndBuilder;
 
@@ -16,19 +15,19 @@ public class MatchScoreCalculationService {
     private final TieBreak tieBreak;
     private final PointsVictoryAndAdvantage pointsVictoryAndAdvantage;
     private final GamesVictory gamesVictory;
-    private final SetsVictoryAndWinner setsVictoryAndWinner;
+    private final SetsVictory setsVictory;
     private final FinishedMatchesPersistenceService finishedMatchesPersistenceService;
 
     public MatchScoreCalculationService
             (PointIncrementRule pointIncrementRule,
              FinishedMatchesPersistenceService finishedMatchesPersistenceService,
-             SetsVictoryAndWinner setsVictoryAndWinner,
+             SetsVictory setsVictory,
              GamesVictory gamesVictory,
              PointsVictoryAndAdvantage pointsVictoryAndAdvantage,
              TieBreak tieBreak) {
         this.pointIncrementRule = pointIncrementRule;
         this.finishedMatchesPersistenceService = finishedMatchesPersistenceService;
-        this.setsVictoryAndWinner = setsVictoryAndWinner;
+        this.setsVictory = setsVictory;
         this.gamesVictory = gamesVictory;
         this.pointsVictoryAndAdvantage = pointsVictoryAndAdvantage;
         this.tieBreak = tieBreak;
@@ -43,17 +42,12 @@ public class MatchScoreCalculationService {
             pointsVictoryAndAdvantage.handleNormalGame(playerScore, opponentScore);
         }
 
-        gamesVictory.handleGameVictory(playerScore, opponentScore);
+        gamesVictory.handleGamesVictory(playerScore, opponentScore);
 
-        boolean victory = setsVictoryAndWinner.isSetVictory(playerScore.getSets(), opponentScore.getSets());
-        if (victory) {
-            currentMatch.getMatchModel().setFinished(true);
+        setsVictory.handleSetsVictory(playerScore, opponentScore, currentMatch);
 
-            PlayerModel player = setsVictoryAndWinner.determineWinner(currentMatch);
-            currentMatch.getMatchModel().setWinner(player);
-
+        if (currentMatch.getMatchModel().isFinished()) {
             Match match = EntitiesMapperAndBuilder.buildMatch(currentMatch);
-
             finishedMatchesPersistenceService.save(match);
         }
     }

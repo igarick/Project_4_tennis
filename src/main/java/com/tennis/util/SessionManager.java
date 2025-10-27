@@ -2,8 +2,6 @@ package com.tennis.util;
 
 import com.tennis.exception.ConnectionException;
 import com.tennis.exception.ErrorInfo;
-import lombok.Getter;
-import org.hibernate.HibernateException;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 

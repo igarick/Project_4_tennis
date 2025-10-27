@@ -1,6 +1,6 @@
 package com.tennis.controller;
 
-import com.tennis.dto.MatchesPaginationDto;
+import com.tennis.dto.PaginatedMatchesDto;
 import com.tennis.dto.RequestMatchParamsDto;
 import com.tennis.service.MatchService;
 import com.tennis.util.JspHelper;
@@ -49,14 +49,9 @@ public class MatchesController extends HttpServlet {
                 paramPage,
                 paramFilter);
 
-        MatchesPaginationDto paginationDto = matchService.getPaginatedMatches(paramsDto);
+        PaginatedMatchesDto paginatedMatchesDto = matchService.getPaginatedMatches(paramsDto);
 
-        RequestPaginationSetter.SetAttributes(req, paramFilter, paginationDto);
-
-//        req.setAttribute("paramFilter", paramFilter);
-//        req.setAttribute("totalPages", paginationDto.totalPages());
-//        req.setAttribute("currentPage", paginationDto.currentPage());
-//        req.setAttribute("matches", paginationDto.matchesDto());
+        RequestPaginationSetter.SetAttributes(req, paramFilter, paginatedMatchesDto);
         req.getRequestDispatcher(JspHelper.getPath(MATCHES_JSP)).forward(req, resp);
     }
 }

@@ -7,8 +7,8 @@ public class GamesVictory {
     private static final int AMOUNT_GAMES_FOR_WIN_TILL_TIE_BREAK = 6;
     private static final int AMOUNT_GAMES_FOR_WIN_AFTER_TIE_BREAK = 7;
 
-    public void handleGameVictory(Score player, Score opponent) {
-        if (isGameVictory(player.getGames(), opponent.getGames())) {
+    public void handleGamesVictory(Score player, Score opponent) {
+        if (isGamesVictory(player.getGames(), opponent.getGames())) {
             player.setGames(0);
             opponent.setGames(0);
 
@@ -16,7 +16,7 @@ public class GamesVictory {
         }
     }
 
-    private boolean isGameVictory(int playerGameScore, int opponentGameScore) {
+    private boolean isGamesVictory(int playerGameScore, int opponentGameScore) {
         return ((playerGameScore == AMOUNT_GAMES_FOR_WIN_TILL_TIE_BREAK &&
                  (playerGameScore - opponentGameScore >= ADVANTAGE_POINTS_FOR_WIN)) ||
                 (playerGameScore == AMOUNT_GAMES_FOR_WIN_AFTER_TIE_BREAK &&

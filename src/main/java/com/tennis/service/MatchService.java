@@ -1,7 +1,9 @@
 package com.tennis.service;
 
 import com.tennis.dao.MatchDao;
-import com.tennis.dto.*;
+import com.tennis.dto.MatchDto;
+import com.tennis.dto.PaginatedMatchesDto;
+import com.tennis.dto.RequestMatchParamsDto;
 
 import java.util.List;
 
@@ -17,7 +19,7 @@ public class MatchService {
         this.matchDao = matchDao;
     }
 
-    public MatchesPaginationDto getPaginatedMatches(RequestMatchParamsDto paramsDto) {
+    public PaginatedMatchesDto getPaginatedMatches(RequestMatchParamsDto paramsDto) {
         long parsedPage = Long.parseLong(paramsDto.page());
         int currentPage = Math.toIntExact(parsedPage);
         String name = paramsDto.name();
@@ -36,7 +38,7 @@ public class MatchService {
         }
         int totalPages = (int) Math.ceil((double) amountMatches / LIMIT);
 
-        return new MatchesPaginationDto(
+        return new PaginatedMatchesDto(
                 totalPages,
                 currentPage,
                 amountMatches,

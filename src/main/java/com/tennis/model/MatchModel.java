@@ -1,6 +1,5 @@
 package com.tennis.model;
 
-import com.tennis.entity.Player;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;

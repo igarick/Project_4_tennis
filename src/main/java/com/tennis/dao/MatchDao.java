@@ -145,42 +145,4 @@ public class MatchDao {
             }
         }
     }
-//---------------------- ГПТ вар---------------
-//    public Long countId() {
-//        String hql = "SELECT count(m.id) FROM Match m";
-//        return executeCountQuery(hql, query -> {});
-//    }
-//
-//    public Long countIdByName(String name) {
-//        String hql = "SELECT count(m.id) FROM Match m WHERE m.player1.name = :name OR m.player2.name = :name";
-//        return executeCountQuery(hql, query -> query.setParameter("name", name));
-//    }
-//
-//    private Long executeCountQuery(String hql, Consumer<Query<?>> parameterSetter) {
-//        Session session = null;
-//        Transaction transaction = null;
-//
-//        try {
-//            SessionFactory factory = SessionManager.getSessionFactory();
-//            session = factory.getCurrentSession();
-//            transaction = session.beginTransaction();
-//
-//            Query<Long> query = session.createQuery(hql, Long.class);
-//            parameterSetter.accept(query); // установить параметры, если есть
-//
-//            Long result = query.uniqueResult();
-//            transaction.commit();
-//            return result;
-//        } catch (Exception e) {
-//            if (transaction != null) {
-//                transaction.rollback();
-//            }
-//            throw new RuntimeException("Ошибка выполнения count-запроса", e);
-//        } finally {
-//            if (session != null) {
-//                session.close();
-//            }
-//        }
-//    }
-
 }
