@@ -9,9 +9,12 @@ import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @WebListener
 public class DataInitializer implements ServletContextListener {
+    private static final Logger log = LoggerFactory.getLogger(DataInitializer.class);
 
     @Override
     public void contextInitialized(ServletContextEvent sce) {
@@ -83,10 +86,11 @@ public class DataInitializer implements ServletContextListener {
             session.persist(match15);
 
             transaction.commit();
+            log.info("Data initialized successfully");
         } catch (HibernateException e) {
             if (transaction != null) {
                 transaction.rollback();
-                throw new RuntimeException("Data initialization error");
+                log.info("Data initialization error");
             }
             throw new RuntimeException(e);
         } finally {
