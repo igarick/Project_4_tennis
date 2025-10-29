@@ -28,10 +28,10 @@
 </head>
 <body>
 <div class="error-code">
-  <%= request.getAttribute("errorCode") %>
+  ${errorCode}>
 </div>
 <div class="error-message">
-  <%= request.getAttribute("errorMessage") %>
+  ${errorMessage}
 </div>
 </body>
 </html>

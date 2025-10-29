@@ -13,7 +13,7 @@ public class NewMatchService {
         this.playerDao = playerDao;
     }
 
-    public PlayerModel get(PlayerModel model) {
+    public PlayerModel getPlayerModel(PlayerModel model) {
         List<Player> players = playerDao.findByName(model.getName());
         if (players.isEmpty()) {
             Player player = playerDao.save(model.getName());

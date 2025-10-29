@@ -53,8 +53,8 @@ public class NewMatchController extends HttpServlet {
         PlayerModel firstPlayerModel = new PlayerModel(null, parameter1.toUpperCase());
         PlayerModel secondPlayerModel = new PlayerModel(null, parameter2.toUpperCase());
 
-        PlayerModel firstPlayer = newMatchService.get(firstPlayerModel);
-        PlayerModel secondPlayer = newMatchService.get(secondPlayerModel);
+        PlayerModel firstPlayer = newMatchService.getPlayerModel(firstPlayerModel);
+        PlayerModel secondPlayer = newMatchService.getPlayerModel(secondPlayerModel);
 
         UUID uuid = UUID.randomUUID();
 

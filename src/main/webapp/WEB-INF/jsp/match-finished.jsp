@@ -63,7 +63,7 @@
 
 <div class="container">
   <div class="winner-banner">
-    🎉 Winner: <%= request.getAttribute("winnerName") %>
+    🎉 Winner: ${winnerName}
   </div>
 
   <table>
@@ -77,16 +77,16 @@
     </thead>
     <tbody>
     <tr>
-      <td><%= request.getAttribute("firstPlayerName") %></td>
-      <td><%= request.getAttribute("setScoreFirstPlayer") %></td>
-      <td><%= request.getAttribute("gameScoreFirstPlayer") %></td>
-      <td><%= request.getAttribute("pointScoreFirstPlayer") %></td>
+      <td>${firstPlayerName}</td>
+      <td>${setScoreFirstPlayer}</td>
+      <td>${gameScoreFirstPlayer}</td>
+      <td>${pointScoreFirstPlayer}</td>
     </tr>
     <tr>
-      <td><%= request.getAttribute("secondPlayerName") %></td>
-      <td><%= request.getAttribute("setScoreSecondPlayer") %></td>
-      <td><%= request.getAttribute("gameScoreSecondPlayer") %></td>
-      <td><%= request.getAttribute("pointScoreSecondPlayer") %></td>
+      <td>${secondPlayerName}</td>
+      <td>${setScoreSecondPlayer}</td>
+      <td>${gameScoreSecondPlayer}</td>
+      <td>${pointScoreSecondPlayer}</td>
     </tr>
     </tbody>
   </table>

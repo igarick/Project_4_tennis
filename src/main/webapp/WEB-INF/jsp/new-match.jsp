@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%--<%@ page contentType="text/html;charset=UTF-8" language="java" %>--%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
@@ -58,11 +58,6 @@
 
     <div class="form-container">
         <form method="post" action="new-match">
-<%--            <% String error = (String) request.getAttribute("error"); %>--%>
-<%--            <% if (error != null) { %>--%>
-<%--            <p class="error"><%= error %></p>--%>
-<%--            <% } %>--%>
-
             <c:if test="${not empty error}">
                 <p class="error">"${error}"</p>
             </c:if>
