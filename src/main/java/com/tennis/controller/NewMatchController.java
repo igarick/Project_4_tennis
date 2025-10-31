@@ -58,7 +58,7 @@ public class NewMatchController extends HttpServlet {
 
         UUID uuid = UUID.randomUUID();
 
-        MatchScoreModel matchScoreModel = EntitiesMapperAndBuilder.buildInitialMatchScore(firstPlayer, secondPlayer);
+        MatchScoreModel matchScoreModel = MatchScoreModel.createInitial(firstPlayer, secondPlayer);
 
         ongoingMatchesService.writeCurrentMatch(uuid, matchScoreModel);
 

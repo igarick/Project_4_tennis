@@ -47,7 +47,9 @@ public class MatchScoreCalculationService {
         setsVictory.handleSetsVictory(playerScore, opponentScore, currentMatch);
 
         if (currentMatch.getMatchModel().isFinished()) {
-            Match match = EntitiesMapperAndBuilder.buildMatch(currentMatch);
+
+            Match match = Match.from(currentMatch);
+
             finishedMatchesPersistenceService.save(match);
         }
     }

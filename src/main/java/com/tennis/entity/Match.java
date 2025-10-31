@@ -1,12 +1,12 @@
 package com.tennis.entity;
 
+import com.tennis.model.MatchScoreModel;
+import com.tennis.util.EntitiesMapperAndBuilder;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -15,7 +15,6 @@ import lombok.NoArgsConstructor;
 public class Match {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "ID", nullable = false)
     private Integer ID;
 
     @ManyToOne
@@ -29,4 +28,12 @@ public class Match {
     @ManyToOne
     @JoinColumn(name = "WINNER")
     private Player winner;
+
+    public static Match from(MatchScoreModel model) {
+        return Match.builder()
+                .player1(EntitiesMapperAndBuilder.mapToEntity(model.getMatchModel().getPlayer1()))
+                .player2(EntitiesMapperAndBuilder.mapToEntity(model.getMatchModel().getPlayer2()))
+                .winner(EntitiesMapperAndBuilder.mapToEntity(model.getMatchModel().getWinner()))
+                .build();
+    }
 }
